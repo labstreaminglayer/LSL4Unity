@@ -6,7 +6,6 @@
 # ignore LSL stuff cause of license
 liblsl32.dll
 liblsl64.dll
-LSL.cs
 
 # project specific
 /*.meta

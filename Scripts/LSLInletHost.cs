@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LSLHost : MonoBehaviour {
+public class LSLInletHost : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
