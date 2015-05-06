@@ -58,7 +58,7 @@ public class LSLEditor : EditorWindow
 
          scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(150));
          GUILayoutOption fieldWidth = GUILayout.Width( EditorGUIUtility.currentViewWidth / 4);
-         GUILayoutOption[] parameter = new GUILayoutOption[]{ };
+        // GUILayoutOption[] parameter = new GUILayoutOption[]{ };
          EditorGUILayout.BeginHorizontal();
          EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, fieldWidth);
          EditorGUILayout.LabelField("Type", EditorStyles.boldLabel, fieldWidth);

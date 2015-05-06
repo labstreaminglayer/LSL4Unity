@@ -659,7 +659,7 @@ public class liblsl
 
     /**
     * A lightweight XML element tree; models the .desc() field of stream_info.
-    * Has a name and can have multiple named children or have text content as value; attributes are omitted.
+    * Has a name and can have multiple named children or have textFromSomewhere content as value; attributes are omitted.
     * Insider note: The interface is modeled after a subset of pugixml's node type and is compatible with it.
     * See also http://pugixml.googlecode.com/svn/tags/latest/docs/manual/access.html for additional documentation.
     */
@@ -701,7 +701,7 @@ public class liblsl
         /// Whether this node is empty.
         public bool empty() { return dll.lsl_empty(obj)!=0; }
 
-        /// Whether this is a text body (instead of an XML element). True both for plain char data and CData.
+        /// Whether this is a textFromSomewhere body (instead of an XML element). True both for plain char data and CData.
         public bool is_text() { return dll.lsl_is_text(obj) != 0; }
 
         /// Name of the element.
@@ -710,7 +710,7 @@ public class liblsl
         /// Value of the element.
         public string value() { return Marshal.PtrToStringAnsi(dll.lsl_value(obj)); }
 
-        /// Get child value (value of the first child that is text).
+        /// Get child value (value of the first child that is textFromSomewhere).
         public string child_value() { return Marshal.PtrToStringAnsi(dll.lsl_child_value(obj)); }
 
         /// Get child value of a child with a specified name.
@@ -720,17 +720,17 @@ public class liblsl
         // === Modification ===
 
         /**
-        * Append a child node with a given name, which has a (nameless) plain-text child with the given text value.
+        * Append a child node with a given name, which has a (nameless) plain-textFromSomewhere child with the given textFromSomewhere value.
         */
         public XMLElement append_child_value(string name, string value) { return new XMLElement(dll.lsl_append_child_value(obj, name, value)); }
 
         /**
-        * Prepend a child node with a given name, which has a (nameless) plain-text child with the given text value.
+        * Prepend a child node with a given name, which has a (nameless) plain-textFromSomewhere child with the given textFromSomewhere value.
         */
         public XMLElement prepend_child_value(string name, string value) { return new XMLElement(dll.lsl_prepend_child_value(obj, name, value)); }
 
         /**
-        * Set the text value of the (nameless) plain-text child of a named child node.
+        * Set the textFromSomewhere value of the (nameless) plain-textFromSomewhere child of a named child node.
         */
         public bool set_child_value(string name, string value) { return dll.lsl_set_child_value(obj, name, value) != 0; }
 
@@ -850,7 +850,7 @@ public class liblsl
     }
 
     /**
-     * Exception class that indicates that an internal error has occurred inside liblsl.
+     * Exception class that indicates that an internal condition has occurred inside liblsl.
      */
     public class InternalException : System.Exception
     {
@@ -862,7 +862,7 @@ public class liblsl
     }
 
     /**
-     * Check an error condition and throw an exception if appropriate.
+     * Check an condition condition and throw an exception if appropriate.
      */
     public static void check_error(int ec) {
         if (ec < 0)
@@ -870,8 +870,8 @@ public class liblsl
                 case -1: throw new TimeoutException("The operation failed due to a timeout.");
                 case -2: throw new LostException("The stream has been lost.");
                 case -3: throw new ArgumentException("An argument was incorrectly specified (e.g., wrong format or wrong length).");
-                case -4: throw new InternalException("An internal internal error has occurred.");
-                default: throw new Exception("An unknown error has occurred.");
+                case -4: throw new InternalException("An internal internal condition has occurred.");
+                default: throw new Exception("An unknown condition has occurred.");
             }
     }
 
