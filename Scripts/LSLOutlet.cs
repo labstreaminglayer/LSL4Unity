@@ -8,8 +8,8 @@ public class LSLOutlet : MonoBehaviour
     private liblsl.StreamInfo streamInfo;
     private float[] currentSample;
 
-    public string StreamName = "beMoBI.Unity.OVR";
-    public string StreamType = "Unity.OVR.Orientation";
+    public string StreamName = "beMoBI.Unity.ExampleStream";
+    public string StreamType = "Unity.Random01f";
     public int ChannelCount = 4;
 
     // Use this for initialization
@@ -23,12 +23,11 @@ public class LSLOutlet : MonoBehaviour
     }
 
     public void FixedUpdate()
-    {
-        OVRPose pose = OVRManager.display.GetHeadPose();
-        currentSample[0] = pose.orientation.x;
-        currentSample[1] = pose.orientation.y;
-        currentSample[2] = pose.orientation.z;
-        currentSample[3] = pose.orientation.w; 
+    { 
+        currentSample[0] = Random.value;
+        currentSample[1] = Random.value;
+        currentSample[2] = Random.value;
+        currentSample[3] = Random.value; 
         outlet.push_sample(currentSample);
     }
 
