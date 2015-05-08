@@ -32,7 +32,7 @@ public class LSLEditorIntegration : ScriptableObject
         lib64Available = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, lib64Name)));
         wrapperFileAvailable = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, wrapperFileName)));
 
-        if (lib64Available && lib32Available && wrapperFileAvailable)
+        if ((lib64Available || lib32Available) && wrapperFileAvailable)
             return true;
         
         Debug.LogError("LabStreamingLayer libraries not available! See " + wikiURL + " for installation instructions");
