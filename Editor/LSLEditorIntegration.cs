@@ -5,7 +5,7 @@ using System.IO;
 
 public class LSLEditorIntegration : ScriptableObject
 {
-    static readonly string wikiURL = "https://github.com/xfleckx/LSL4Unity/wikihttps://github.com/xfleckx/LSL4Unity/wiki";
+    static readonly string wikiURL = "https://github.com/xfleckx/LSL4Unity/wiki";
     static readonly string lib64Name = "liblsl64.dll";
     static readonly string lib32Name = "liblsl32.dll";
     static readonly string wrapperFileName = "LSL.cs";
