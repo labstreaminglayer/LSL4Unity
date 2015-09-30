@@ -18,46 +18,34 @@ public class LSLEditor : EditorWindow
 
     public void Init() 
     {
-        
-    
+        LookUp();
+
+        this.titleContent = new GUIContent("LSL Utility");
     }
 
+    liblsl.StreamInfo[] streamInfos = null;
+
     void OnGUI() 
-    { 
-         liblsl.StreamInfo[] streamInfos = null;
-
+    {
          EditorGUILayout.BeginVertical();
+         EditorGUILayout.BeginHorizontal();
 
-         streamLookUpResult = clickLookUpFirst;
+         EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
 
-         if (GUILayout.Button("LSL Stream Lookup"))
+         if (GUILayout.Button("LSL Stream Lookup", GUILayout.Height(40f)))
          {
-             listNamesOfStreams.Clear();
-
-             streamInfos = liblsl.resolve_streams(WaitOnResolveStreams);
-
-             if (streamInfos.Length == 0)
-             {
-#if UNITY_EDITOR
-                 Debug.LogWarning(noStreamsFound);
-#endif
-                 streamLookUpResult = noStreamsFound;
-             }
-             else
-             {
-                 foreach (var item in streamInfos)
-                 {
-                     listNamesOfStreams.Add(string.Format("{0} {1} {2} {3}", item.name(), item.type(), item.hostname(), item.nominal_srate()));
-                 }
-
-                 streamLookUpResult = listNamesOfStreams.Count + nStreamsFound;
-             }
-
-             EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
+             LookUp();
          }
 
+         EditorGUILayout.HelpBox("The lookup process for LSL Streams might take a few seconds!", MessageType.Info);
+
+         EditorGUILayout.EndHorizontal();
+
+         EditorGUILayout.Space();
+         EditorGUILayout.Separator();
+
          scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(150));
-         GUILayoutOption fieldWidth = GUILayout.Width( EditorGUIUtility.currentViewWidth / 4);
+         GUILayoutOption fieldWidth = GUILayout.Width( EditorGUIUtility.currentViewWidth / 4.3f);
         // GUILayoutOption[] parameter = new GUILayoutOption[]{ };
          EditorGUILayout.BeginHorizontal();
          EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, fieldWidth);
@@ -70,10 +58,10 @@ public class LSLEditor : EditorWindow
              string[] s = item.Split(' ');
 
              EditorGUILayout.BeginHorizontal();
-             EditorGUILayout.LabelField(s[0], fieldWidth);
-             EditorGUILayout.LabelField(s[1], fieldWidth);
-             EditorGUILayout.LabelField(s[2], fieldWidth);
-             EditorGUILayout.LabelField(s[3], fieldWidth);
+             EditorGUILayout.LabelField(new GUIContent(s[0],s[0]), fieldWidth);
+             EditorGUILayout.LabelField(new GUIContent(s[1],s[1]), fieldWidth);
+             EditorGUILayout.LabelField(new GUIContent(s[2],s[2]), fieldWidth);
+             EditorGUILayout.LabelField(new GUIContent(s[3],s[3]), fieldWidth);
              EditorGUILayout.EndHorizontal();
              if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
              {
@@ -85,6 +73,29 @@ public class LSLEditor : EditorWindow
          }
          EditorGUILayout.EndScrollView();
          EditorGUILayout.EndVertical();
+
+    }
+
+    private void LookUp()
+    {
+        listNamesOfStreams.Clear();
+
+        streamInfos = liblsl.resolve_streams(WaitOnResolveStreams);
+
+        if (streamInfos.Length == 0)
+        { 
+            Debug.LogWarning(noStreamsFound); 
+            streamLookUpResult = noStreamsFound;
+        }
+        else
+        {
+            foreach (var item in streamInfos)
+            {
+                listNamesOfStreams.Add(string.Format("{0} {1} {2} {3}", item.name(), item.type(), item.hostname(), item.nominal_srate()));
+            }
+
+            streamLookUpResult = listNamesOfStreams.Count + nStreamsFound;
+        }
 
     }
 }
