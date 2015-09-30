@@ -881,9 +881,12 @@ public class liblsl
 
     class dll
     {
+#if UNITY_EDITOR_64
         /// Name of the binary to include -- replace this if you are on a non-Windows platform (e.g., liblsl64.so)
+        const string libname = "Assets/LSL4Unity/liblsl64.dll";
+#else
         const string libname = "Assets/LSL4Unity/liblsl32.dll";
-
+#endif
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_protocol_version();
 
