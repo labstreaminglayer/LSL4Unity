@@ -10,6 +10,7 @@ public class LSLEditorIntegration : ScriptableObject
     static readonly string lib32Name = "liblsl32.dll";
     static readonly string wrapperFileName = "LSL.cs";
     static readonly string assetSubFolder = "LSL4Unity";
+    static readonly string libFolder = assetSubFolder + @"\lib"; 
 
     [MenuItem("LSL/Open LSL Window")]
     static void OpenLSLWindow()
@@ -26,13 +27,13 @@ public class LSLEditorIntegration : ScriptableObject
 
         bool lib64Available = false; 
         bool lib32Available = false;
-        bool wrapperFileAvailable = false;
-        
-        lib32Available = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, lib32Name)));
-        lib64Available = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, lib64Name)));
-        wrapperFileAvailable = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, wrapperFileName)));
+        bool apiAvailable = false;
 
-        if ((lib64Available || lib32Available) && wrapperFileAvailable)
+        lib32Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name)));
+        lib64Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name)));
+        apiAvailable = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, wrapperFileName)));
+
+        if ((lib64Available || lib32Available) && apiAvailable)
             return true;
         
         Debug.LogError("LabStreamingLayer libraries not available! See " + wikiURL + " for installation instructions");
