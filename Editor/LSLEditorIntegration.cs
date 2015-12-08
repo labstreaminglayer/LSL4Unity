@@ -11,7 +11,7 @@ public class LSLEditorIntegration : ScriptableObject
     static readonly string wrapperFileName = "LSL.cs";
     static readonly string assetSubFolder = "LSL4Unity";
 
-    [MenuItem("LSL/Open LSL Window")]
+    [MenuItem("LSL/LSL Window")]
     static void OpenLSLWindow()
     {
         LSLEditor window = (LSLEditor)EditorWindow.GetWindow(typeof(LSLEditor));
@@ -19,7 +19,7 @@ public class LSLEditorIntegration : ScriptableObject
         
     }
 
-    [MenuItem("LSL/Open LSL Window", true)]
+    [MenuItem("LSL/LSL Window", true)]
     static bool ValidateOpenLSLWindow()
     {
         string root = Application.dataPath;
