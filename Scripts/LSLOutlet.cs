@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using LSL;
+using System.Diagnostics;
 
 public class LSLOutlet : MonoBehaviour
 {
@@ -8,32 +9,38 @@ public class LSLOutlet : MonoBehaviour
     private liblsl.StreamInfo streamInfo;
     private float[] currentSample;
 
-    public string StreamName = "beMoBI.Unity.ExampleStream";
-    public string StreamType = "Unity.Random01f";
-    public int ChannelCount = 4;
+    public string StreamName = "Unity.ExampleStream";
+    public string StreamType = "Unity.FixedUpdateTime";
+    public int ChannelCount = 1;
+
+    Stopwatch watch;
 
     // Use this for initialization
     void Start()
     {
+        watch = new Stopwatch();
+
+        watch.Start();
+
         currentSample = new float[ChannelCount];
 
-        streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, Time.fixedDeltaTime);
+        streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, Time.fixedDeltaTime * 1000);
 
         outlet = new liblsl.StreamOutlet(streamInfo);
     }
 
     public void FixedUpdate()
-    { 
-        currentSample[0] = Random.value;
-        currentSample[1] = Random.value;
-        currentSample[2] = Random.value;
-        currentSample[3] = Random.value; 
-        outlet.push_sample(currentSample);
-    }
-
-    // Update is called once per frame
-    void Update()
     {
+        if (watch == null)
+            return;
 
+        watch.Stop();
+
+        currentSample[0] = watch.ElapsedMilliseconds;
+
+        watch.Reset();
+        watch.Start();
+
+        outlet.push_sample(currentSample);
     }
 }
