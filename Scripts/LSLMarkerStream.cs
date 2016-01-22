@@ -30,8 +30,14 @@ public class LSLMarkerStream : MonoBehaviour {
 
 		lslOutlet = new LSL.liblsl.StreamOutlet(lslStreamInfo);
 	}
-	
-	public void Write(string marker, float customTimeStamp)
+
+    public void Write(string marker)
+    {
+        sample[0] = marker;
+        lslOutlet.push_sample(sample);
+    }
+
+    public void Write(string marker, float customTimeStamp)
 	{
 		sample[0] = marker;
 		lslOutlet.push_sample(sample, customTimeStamp); 
@@ -48,8 +54,8 @@ public class LSLMarkerStream : MonoBehaviour {
     IEnumerator WriteMarkerAfterImageIsRendered()
     {
         yield return new WaitForEndOfFrame();
-        
-        lslOutlet.push_sample(sample);
+
+        Write(pendingMarker);
 
         yield return null;
     }
