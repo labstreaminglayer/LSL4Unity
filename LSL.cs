@@ -906,10 +906,24 @@ public class liblsl
         #endif
 
         #if UNITY_EDITOR_WIN && UNITY_EDITOR_64 || UNITY_STANDALONE_WIN
-                    const string libname = "liblsl64.dll";
+                    const string libname = "liblsl64.so";
         #elif UNITY_EDITOR_WIN && UNITY_STANDALONE_WIN
-                    const string libname =  "liblsl32.dll";
+                            const string libname =  "liblsl32.so";
         #endif
+
+
+        #if UNITY_EDITOR_LINUX && UNITY_EDITOR_64
+                    const string pathToAllLibs = "Assets/LSL4Unity/lib/";
+        #elif UNITY_STANDALONE_LINUX
+                            const string pathToAllLibs = "../Plugins/";
+        #endif
+
+        #if UNITY_EDITOR_LINUX && UNITY_EDITOR_64 || UNITY_STANDALONE_LINUX
+                    const string libname = "liblsl64.so";
+        #elif UNITY_EDITOR_LINUX && UNITY_STANDALONE_LINUX
+                            const string libname =  "liblsl32.so";
+        #endif
+
 
         const string pathToLib = pathToAllLibs + libname;
 
