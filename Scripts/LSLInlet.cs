@@ -1,39 +1,63 @@
 ﻿using UnityEngine;
 using System.Collections;
 using LSL;
+using System;
 
 public class LSLInlet : MonoBehaviour {
 
+    public enum UpdateMoment { FixedUpdate, Update }
+
+    public UpdateMoment moment;
+
+    public string StreamName;
+    
     liblsl.StreamInfo[] results;
     liblsl.StreamInlet inlet;
+    liblsl.ContinuousResolver resolver;
 
     int expectedChannels = 0;
-
+    
     void Start () {
+         
+        Debug.Log("Creating LSL resolver for stream " + StreamName);
 
-        // wait until an EEG stream shows up
-        results = liblsl.resolve_stream("type", "Unity.FixedUpdateTime");
-        // open an inlet and print some interesting info about the stream (meta-data, etc.)
-        inlet = new liblsl.StreamInlet(results[0]);
+        resolver = new liblsl.ContinuousResolver("name", StreamName);
 
-        expectedChannels = inlet.info().channel_count();
-
-        Debug.Log(inlet.info().as_xml());
+        StartCoroutine(ResolveExpectedStream());
     }
-     
-    void FixedUpdate()
+    
+    IEnumerator ResolveExpectedStream()
+    {
+        var results = resolver.results();
+
+        yield return new WaitUntil(() => results.Length > 0);
+
+        inlet = new liblsl.StreamInlet(results[0]);
+        
+        yield return null;
+    }
+
+    private void pullSamples()
     {
         // read samples
         float[] sample = new float[expectedChannels];
 
-        while (inlet.samples_available() > 0)
+        while (inlet.pull_sample(sample, 0.0f) != 0)
         {
-            inlet.pull_sample(sample);
-
             foreach (float f in sample)
                 Debug.Log(string.Format("\t{0}", f));
-
         }
     }
 
+    void FixedUpdate()
+    {
+        if (moment == UpdateMoment.FixedUpdate && inlet != null)
+            pullSamples();
+    }
+    
+    void Update()
+    {
+        if (moment == UpdateMoment.Update && inlet != null)
+            pullSamples();
+    }
 }
