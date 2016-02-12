@@ -42,7 +42,8 @@ public class LSLTimeSync : MonoBehaviour {
         fixedUpdateTimeStamp = LSL.liblsl.local_clock();
     }
 	
-	void Update () {
+	void Update ()
+    {
 	    updateTimeStamp = LSL.liblsl.local_clock();
     }
 }

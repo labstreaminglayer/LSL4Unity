@@ -10,7 +10,7 @@ public class LSLEditorIntegration : ScriptableObject
     static readonly string lib32Name = "liblsl32.dll";
     static readonly string wrapperFileName = "LSL.cs";
     static readonly string assetSubFolder = "LSL4Unity";
-    static readonly string libFolder = assetSubFolder + @"\lib"; 
+    static readonly string libFolder = assetSubFolder + @"/lib"; 
 
     [MenuItem("LSL/LSL Window")]
     static void OpenLSLWindow()
