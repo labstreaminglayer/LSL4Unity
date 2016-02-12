@@ -16,9 +16,11 @@ public class LSLEditor : EditorWindow
     private Vector2 scrollVector;
     private string streamLookUpResult;
 
+    private liblsl.ContinuousResolver resolver;
+
     public void Init() 
     {
-        LookUp();
+        resolver = new liblsl.ContinuousResolver();
 
         this.titleContent = new GUIContent("LSL Utility");
     }
@@ -27,17 +29,15 @@ public class LSLEditor : EditorWindow
 
     void OnGUI() 
     {
+        if (resolver == null)
+            Init();
+
          EditorGUILayout.BeginVertical();
          EditorGUILayout.BeginHorizontal();
 
-         EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
+        UpdateStreams();
 
-         if (GUILayout.Button("LSL Stream Lookup", GUILayout.Height(40f)))
-         {
-             LookUp();
-         }
-
-         EditorGUILayout.HelpBox("The lookup process for LSL Streams might take a few seconds!", MessageType.Info);
+        EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
 
          EditorGUILayout.EndHorizontal();
 
@@ -76,12 +76,12 @@ public class LSLEditor : EditorWindow
 
     }
 
-    private void LookUp()
+    private void UpdateStreams()
     {
         listNamesOfStreams.Clear();
 
-        streamInfos = liblsl.resolve_streams(WaitOnResolveStreams);
-
+        streamInfos = resolver.results();
+        
         if (streamInfos.Length == 0)
         { 
             Debug.LogWarning(noStreamsFound); 
