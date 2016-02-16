@@ -2,6 +2,7 @@
 using UnityEditor;
 using LSL;
 using System.Collections.Generic;
+using Assets.LSL4Unity.Editor;
 
 public class LSLEditor : EditorWindow
 {
@@ -12,13 +13,13 @@ public class LSLEditor : EditorWindow
     private const string nStreamsFound = " Streams found";
 
     private List<string> listNamesOfStreams = new List<string>();
- 
+
     private Vector2 scrollVector;
     private string streamLookUpResult;
 
     private liblsl.ContinuousResolver resolver;
 
-    public void Init() 
+    public void Init()
     {
         resolver = new liblsl.ContinuousResolver();
 
@@ -27,52 +28,64 @@ public class LSLEditor : EditorWindow
 
     liblsl.StreamInfo[] streamInfos = null;
 
-    void OnGUI() 
+    void OnGUI()
     {
         if (resolver == null)
             Init();
 
-         EditorGUILayout.BeginVertical();
-         EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginVertical();
+        EditorGUILayout.BeginHorizontal();
 
         UpdateStreams();
 
         EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
 
-         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndHorizontal();
 
-         EditorGUILayout.Space();
-         EditorGUILayout.Separator();
+        EditorGUILayout.Space();
+        EditorGUILayout.Separator();
 
-         scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(150));
-         GUILayoutOption fieldWidth = GUILayout.Width( EditorGUIUtility.currentViewWidth / 4.3f);
+        scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(150));
+        GUILayoutOption fieldWidth = GUILayout.Width(EditorGUIUtility.currentViewWidth / 4.3f);
         // GUILayoutOption[] parameter = new GUILayoutOption[]{ };
-         EditorGUILayout.BeginHorizontal();
-         EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, fieldWidth);
-         EditorGUILayout.LabelField("Type", EditorStyles.boldLabel, fieldWidth);
-         EditorGUILayout.LabelField("HostName", EditorStyles.boldLabel, fieldWidth);
-         EditorGUILayout.LabelField("Data Rate", EditorStyles.boldLabel, fieldWidth);
-         EditorGUILayout.EndHorizontal();
-         foreach (var item in listNamesOfStreams)
-         {
-             string[] s = item.Split(' ');
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, fieldWidth);
+        EditorGUILayout.LabelField("Type", EditorStyles.boldLabel, fieldWidth);
+        EditorGUILayout.LabelField("HostName", EditorStyles.boldLabel, fieldWidth);
+        EditorGUILayout.LabelField("Data Rate", EditorStyles.boldLabel, fieldWidth);
+        EditorGUILayout.EndHorizontal();
 
-             EditorGUILayout.BeginHorizontal();
-             EditorGUILayout.LabelField(new GUIContent(s[0],s[0]), fieldWidth);
-             EditorGUILayout.LabelField(new GUIContent(s[1],s[1]), fieldWidth);
-             EditorGUILayout.LabelField(new GUIContent(s[2],s[2]), fieldWidth);
-             EditorGUILayout.LabelField(new GUIContent(s[3],s[3]), fieldWidth);
-             EditorGUILayout.EndHorizontal();
-             if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
-             {
-                if (Event.current.type == EventType.MouseUp) 
-                { 
+        foreach (var item in listNamesOfStreams)
+        {
+            string[] s = item.Split(' ');
+
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Visualize"))
+            {
+                var visualWindow = StreamVisualWindow.GetNewInstanceFor(s[0]);
+
+                visualWindow.Show();
+            }
+
+            EditorGUILayout.LabelField(new GUIContent(s[0], s[0]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[1], s[1]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[2], s[2]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[3], s[3]), fieldWidth);
+
+            EditorGUILayout.EndHorizontal();
+
+            if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+            {
+                if (Event.current.type == EventType.MouseUp)
+                {
                     Debug.Log("Mouse click on :" + item);
                 }
-             }
-         }
-         EditorGUILayout.EndScrollView();
-         EditorGUILayout.EndVertical();
+            }
+        }
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
 
     }
 
@@ -81,10 +94,10 @@ public class LSLEditor : EditorWindow
         listNamesOfStreams.Clear();
 
         streamInfos = resolver.results();
-        
+
         if (streamInfos.Length == 0)
-        { 
-            Debug.LogWarning(noStreamsFound); 
+        {
+            Debug.LogWarning(noStreamsFound);
             streamLookUpResult = noStreamsFound;
         }
         else
