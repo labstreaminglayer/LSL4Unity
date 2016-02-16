@@ -61,18 +61,18 @@ public class LSLEditor : EditorWindow
             string[] s = item.Split(' ');
 
             EditorGUILayout.BeginHorizontal();
-
+             
+            EditorGUILayout.LabelField(new GUIContent(s[0], s[0]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[1], s[1]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[2], s[2]), fieldWidth);
+            EditorGUILayout.LabelField(new GUIContent(s[3], s[3]), fieldWidth);
+            
             if (GUILayout.Button("Visualize"))
             {
                 var visualWindow = StreamVisualWindow.GetNewInstanceFor(s[0]);
 
                 visualWindow.Show();
             }
-
-            EditorGUILayout.LabelField(new GUIContent(s[0], s[0]), fieldWidth);
-            EditorGUILayout.LabelField(new GUIContent(s[1], s[1]), fieldWidth);
-            EditorGUILayout.LabelField(new GUIContent(s[2], s[2]), fieldWidth);
-            EditorGUILayout.LabelField(new GUIContent(s[3], s[3]), fieldWidth);
 
             EditorGUILayout.EndHorizontal();
 
@@ -81,6 +81,8 @@ public class LSLEditor : EditorWindow
                 if (Event.current.type == EventType.MouseUp)
                 {
                     Debug.Log("Mouse click on :" + item);
+
+                    
                 }
             }
         }

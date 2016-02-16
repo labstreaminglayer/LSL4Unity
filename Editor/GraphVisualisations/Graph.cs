@@ -28,7 +28,7 @@ public class Channel
 
 public class Graph
 {
-    public static float YMin = -1, YMax = +1;
+    public float YMin = -1, YMax = +1;
 
     public int MAX_HISTORY = 1024;
 

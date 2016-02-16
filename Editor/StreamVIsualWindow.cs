@@ -68,7 +68,7 @@ namespace Assets.LSL4Unity.Editor
             RenderSelection(info.channel_count());
 
             EditorGUILayout.BeginVertical(GUILayout.MinWidth(500), GUILayout.MinHeight(300));
-            var rect = new Rect(0, 0, 500, 300);
+            var rect = new Rect(100, 0, 500, 300);
                 RenderGraphsForChannels(rect);
             EditorGUILayout.EndVertical();
 
@@ -98,28 +98,12 @@ namespace Assets.LSL4Unity.Editor
         {
             int W = (int)renderingArea.width;
             int H = (int)renderingArea.height;
-
-            if(lineMaterial == null)
-                GetLineMaterial();
-
-            lineMaterial.SetPass(0);
-
-            GL.PushMatrix();
-            GL.LoadPixelMatrix();
-
-            GL.Begin(GL.LINES);
-
-            float yy = 50;
-
+            
             foreach (var channel in graph.channels)
             {
                 if (!channel.isActive)
                     continue;
-
-                lineMaterial.color = channel._color;
-
-                GL.Color(channel._color);
-
+                
                 for (int h = 0; h < this.graph.MAX_HISTORY; h++)
                 {
                     int xPix = (W - 1) - h;
@@ -128,30 +112,26 @@ namespace Assets.LSL4Unity.Editor
                     {
                         float y = channel._data[h];
 
-                        float y_01 = Mathf.InverseLerp(Graph.YMin, Graph.YMax, y);
+                        float y_01 = Mathf.InverseLerp(graph.YMin, graph.YMax, y);
 
                         int yPix = (int)(y_01 * H);
-
-                        Plot(xPix, yPix);
+                        
+                        HandlesPlot(xPix, yPix, channel._color);
                     }
                 }
             }
-
-            GL.End();
-
-            GL.PopMatrix();
+            
         }
-
-        // plot an X
-        void Plot(float x, float y)
+        
+        void HandlesPlot(float x, float y, Color drawColor)
         {
-            // first line of X
-            GL.Vertex3(x - 1, y - 1, 0);
-            GL.Vertex3(x + 1, y + 1, 0);
+            var temp = Handles.color;
 
-            // second
-            GL.Vertex3(x - 1, y + 1, 0);
-            GL.Vertex3(x + 1, y - 1, 0);
+            Handles.color = drawColor;
+
+            Handles.DrawLine(new Vector3(x - 1, y - 1, 0), new Vector3(x + 1, y + 1, 0));
+
+            Handles.color = temp;
         }
 
         private void RenderSelection(int channelIndex)
