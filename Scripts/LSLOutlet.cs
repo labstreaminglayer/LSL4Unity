@@ -3,44 +3,47 @@ using System.Collections;
 using LSL;
 using System.Diagnostics;
 
-public class LSLOutlet : MonoBehaviour
+namespace Assets.LSL4Unity.Scripts
 {
-    private liblsl.StreamOutlet outlet;
-    private liblsl.StreamInfo streamInfo;
-    private float[] currentSample;
-
-    public string StreamName = "Unity.ExampleStream";
-    public string StreamType = "Unity.FixedUpdateTime";
-    public int ChannelCount = 1;
-
-    Stopwatch watch;
-
-    // Use this for initialization
-    void Start()
+    public class LSLOutlet : MonoBehaviour
     {
-        watch = new Stopwatch();
+        private liblsl.StreamOutlet outlet;
+        private liblsl.StreamInfo streamInfo;
+        private float[] currentSample;
 
-        watch.Start();
+        public string StreamName = "Unity.ExampleStream";
+        public string StreamType = "Unity.FixedUpdateTime";
+        public int ChannelCount = 1;
 
-        currentSample = new float[ChannelCount];
+        Stopwatch watch;
 
-        streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, Time.fixedDeltaTime * 1000);
+        // Use this for initialization
+        void Start()
+        {
+            watch = new Stopwatch();
 
-        outlet = new liblsl.StreamOutlet(streamInfo);
-    }
+            watch.Start();
 
-    public void FixedUpdate()
-    {
-        if (watch == null)
-            return;
+            currentSample = new float[ChannelCount];
 
-        watch.Stop();
+            streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, Time.fixedDeltaTime * 1000);
 
-        currentSample[0] = watch.ElapsedMilliseconds;
+            outlet = new liblsl.StreamOutlet(streamInfo);
+        }
 
-        watch.Reset();
-        watch.Start();
+        public void FixedUpdate()
+        {
+            if (watch == null)
+                return;
 
-        outlet.push_sample(currentSample);
+            watch.Stop();
+
+            currentSample[0] = watch.ElapsedMilliseconds;
+
+            watch.Reset();
+            watch.Start();
+
+            outlet.push_sample(currentSample);
+        }
     }
 }
