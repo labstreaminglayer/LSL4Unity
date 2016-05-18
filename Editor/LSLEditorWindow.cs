@@ -68,6 +68,12 @@ namespace Assets.LSL4Unity.Editor
                 EditorGUILayout.LabelField(new GUIContent(s[2], s[2]), fieldWidth);
                 EditorGUILayout.LabelField(new GUIContent(s[3], s[3]), fieldWidth);
 
+                if (GUILayout.Button("Visualize"))
+                {
+                    var visualWindow = StreamVisualWindow.GetNewInstanceFor(s[0]);
+
+                    visualWindow.Show();
+                }
 
                 EditorGUILayout.EndHorizontal();
 
