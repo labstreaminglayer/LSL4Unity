@@ -1,8 +1,9 @@
 # LSL4Unity
 A integration approach of the LabStreamingLayer Framework for Unity3D
-
+See the [Project Wiki](https://github.com/xfleckx/LSL4Unity/wiki) to get more details an
 # Features
 * Simple Editor Integration to lookup LSL streams. 
+* Provides a ready to use Marker stream implementation.
 * Examples for LSL inlets and outlets
 
 # Compatibility info
