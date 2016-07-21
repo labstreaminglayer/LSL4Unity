@@ -899,29 +899,29 @@ public class liblsl
     class dll
     {
 
-#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_EDITOR_LINUX
+		#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_EDITOR_LINUX || (UNITY_EDITOR_OSX && UNITY_EDITOR_64)
             const string pathToAllLibs = "Assets/LSL4Unity/lib/";
-#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
+		#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
             const string pathToAllLibs = "../Plugins/";
-#endif
+		#endif
 
-#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_STANDALONE_WIN
+		#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_STANDALONE_WIN
             const string libname = "liblsl64.dll";
-#elif UNITY_EDITOR_WIN && UNITY_STANDALONE_WIN
+		#elif UNITY_EDITOR_WIN && UNITY_STANDALONE_WIN
             const string libname =  "liblsl32.dll";
-#endif
+		#endif
 
-#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
+		#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
            const string libname = "liblsl64.so";
-#elif UNITY_EDITOR_LINUX && UNITY_STANDALONE_LINUX
+		#elif UNITY_EDITOR_LINUX && UNITY_STANDALONE_LINUX
            const string libname =  "liblsl32.so";
-#endif
+		#endif
 
-#if (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
+		#if (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
            const string libname = "liblsl64.bundle";
-#elif Unity_EDITOR_OSX && UNITY_STANDALONE_OSX
+		#elif Unity_EDITOR_OSX && UNITY_STANDALONE_OSX
            const string libname =  "liblsl32.bundle";
-#endif
+		#endif
 
         const string pathToLib = pathToAllLibs + libname;
 
