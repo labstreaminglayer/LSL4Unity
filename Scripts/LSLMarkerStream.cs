@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using LSL;
 
 namespace Assets.LSL4Unity.Scripts
 {
@@ -10,11 +11,11 @@ namespace Assets.LSL4Unity.Scripts
         public string lslStreamName = "Unity_<Paradigma_Name_here>";
         public string lslStreamType = "LSL_Marker_Strings";
 
-        private LSL.liblsl.StreamInfo lslStreamInfo;
-        private LSL.liblsl.StreamOutlet lslOutlet;
+        private liblsl.StreamInfo lslStreamInfo;
+        private liblsl.StreamOutlet lslOutlet;
         private int lslChannelCount = 1;
         private double nominalRate = 0;
-        private const LSL.liblsl.channel_format_t lslChannelFormat = LSL.liblsl.channel_format_t.cf_string;
+        private const liblsl.channel_format_t lslChannelFormat = liblsl.channel_format_t.cf_string;
 
         private string[] sample;
 
@@ -23,15 +24,15 @@ namespace Assets.LSL4Unity.Scripts
         {
             sample = new string[lslChannelCount];
 
-            lslStreamInfo = new LSL.liblsl.StreamInfo(
-                    lslStreamName,
-                    lslStreamType,
-                    lslChannelCount,
-                    nominalRate,
-                    lslChannelFormat,
-                    unique_source_id);
+            lslStreamInfo = new liblsl.StreamInfo(
+                                        lslStreamName,
+                                        lslStreamType,
+                                        lslChannelCount,
+                                        nominalRate,
+                                        lslChannelFormat,
+                                        unique_source_id);
 
-            lslOutlet = new LSL.liblsl.StreamOutlet(lslStreamInfo);
+            lslOutlet = new liblsl.StreamOutlet(lslStreamInfo);
         }
 
         public void Write(string marker)
