@@ -52,12 +52,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
-                resolver = new liblsl.ContinuousResolver("type", StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
+                resolver = new liblsl.ContinuousResolver("type ", StreamType);
             }
             
             StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
         }
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
 
         IEnumerator ResolveExpectedStream()
         {
@@ -157,12 +166,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
                 resolver = new liblsl.ContinuousResolver("type", StreamType);
             }
 
-            StartCoroutine(ResolveExpectedStream());
-        }
+			StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
+		}
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
 
         IEnumerator ResolveExpectedStream()
         {
@@ -263,12 +281,22 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
                 resolver = new liblsl.ContinuousResolver("type", StreamType);
             }
 
-            StartCoroutine(ResolveExpectedStream());
-        }
+			StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
+		}
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
+
 
         IEnumerator ResolveExpectedStream()
         {
@@ -369,12 +397,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
                 resolver = new liblsl.ContinuousResolver("type", StreamType);
             }
 
-            StartCoroutine(ResolveExpectedStream());
-        }
+			StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
+		}
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
 
         IEnumerator ResolveExpectedStream()
         {
@@ -475,12 +512,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
                 resolver = new liblsl.ContinuousResolver("type", StreamType);
             }
 
-            StartCoroutine(ResolveExpectedStream());
-        }
+			StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
+		}
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
 
         IEnumerator ResolveExpectedStream()
         {
@@ -581,12 +627,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
             else if (expectedStreamHasAType)
             {
-                Debug.Log("Creating LSL resolver for stream with type" + StreamType);
+                Debug.Log("Creating LSL resolver for stream with type " + StreamType);
                 resolver = new liblsl.ContinuousResolver("type", StreamType);
             }
 
-            StartCoroutine(ResolveExpectedStream());
-        }
+			StartCoroutine(ResolveExpectedStream());
+
+			AdditionalStart();
+		}
+		/// <summary>
+		/// Override this method in the subclass to specify what should happen during Start().
+		/// </summary>
+		protected virtual void AdditionalStart() 
+		{
+			//By default, do nothing.
+		}
 
         IEnumerator ResolveExpectedStream()
         {
