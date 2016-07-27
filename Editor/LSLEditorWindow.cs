@@ -3,7 +3,7 @@ using UnityEditor;
 using LSL;
 using System.Collections.Generic;
 
-namespace Assets.LSL4Unity.Editor
+namespace Assets.LSL4Unity.EditorExtensions
 {
     public class LSLEditor : EditorWindow
     {

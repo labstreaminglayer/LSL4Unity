@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.IO;
 
-namespace Assets.LSL4Unity.Editor
+namespace Assets.LSL4Unity.EditorExtensions
 {
     public class LSLEditorIntegration : ScriptableObject
     {
