@@ -899,31 +899,34 @@ public class liblsl
     class dll
     {
 
-		#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_EDITOR_LINUX || (UNITY_EDITOR_OSX && UNITY_EDITOR_64)
+#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || (UNITY_EDITOR_OSX && UNITY_EDITOR_64)
             const string pathToAllLibs = "Assets/LSL4Unity/lib/";
-		#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
-            const string pathToAllLibs = "../Plugins/";
-		#endif
+#elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
+			const string pathToAllLibs = "../Plugins/";
+#endif
 
-		#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64) || UNITY_STANDALONE_WIN
+#if (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
             const string libname = "liblsl64.dll";
-		#elif UNITY_EDITOR_WIN && UNITY_STANDALONE_WIN
-            const string libname =  "liblsl32.dll";
-		#endif
+#elif UNITY_EDITOR_WIN
+			const string libname =  "liblsl32.dll";
+#elif UNITY_STANDALONE_WIN
+			// a build hook will took care that the correct dll will be renamed after a successfull build 
+			const string libname =  "liblsl.dll";
+#endif
 
-		#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
-           const string libname = "liblsl64.so";
-		#elif UNITY_EDITOR_LINUX && UNITY_STANDALONE_LINUX
-           const string libname =  "liblsl32.so";
-		#endif
+#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
+		   const string libname = "liblsl64.so";
+#elif UNITY_EDITOR_LINUX && UNITY_STANDALONE_LINUX
+		   const string libname =  "liblsl32.so";
+#endif
 
-		#if (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
-           const string libname = "liblsl64.bundle";
-		#elif Unity_EDITOR_OSX && UNITY_STANDALONE_OSX
-           const string libname =  "liblsl32.bundle";
-		#endif
+#if (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
+		   const string libname = "liblsl64.bundle";
+#elif Unity_EDITOR_OSX && UNITY_STANDALONE_OSX
+		   const string libname =  "liblsl32.bundle";
+#endif
 
-        const string pathToLib = pathToAllLibs + libname;
+            const string pathToLib = pathToAllLibs + libname;
 
         [DllImport(pathToLib, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_protocol_version();

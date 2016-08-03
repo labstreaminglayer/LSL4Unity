@@ -4,24 +4,26 @@ using System.IO;
 
 namespace Assets.LSL4Unity.EditorExtensions
 {
-    public class LSLEditorIntegration : ScriptableObject
+    public class LSLEditorIntegration
     {
-        static readonly string wikiURL = "https://github.com/xfleckx/LSL4Unity/wiki";
-        static readonly string lib64Name = "liblsl64.dll";
-        static readonly string lib32Name = "liblsl32.dll";
+        public static readonly string wikiURL = "https://github.com/xfleckx/LSL4Unity/wiki";
+        public static readonly string lib64Name = "liblsl64.dll";
+        public static readonly string lib32Name = "liblsl32.dll";
         static readonly string wrapperFileName = "LSL.cs";
         static readonly string assetSubFolder = "LSL4Unity";
         static readonly string libFolder = assetSubFolder + @"/lib";
 
-        [MenuItem("LSL/LSL Window")]
+        [MenuItem("LSL/Show Streams")]
         static void OpenLSLWindow()
         {
-            LSLEditor window = (LSLEditor)EditorWindow.GetWindow(typeof(LSLEditor));
+            var window = EditorWindow.GetWindow<LSLEditor>(true);
+
             window.Init();
 
+            window.ShowUtility();
         }
 
-        [MenuItem("LSL/LSL Window", true)]
+        [MenuItem("LSL/Show Streams", true)]
         static bool ValidateOpenLSLWindow()
         {
             string root = Application.dataPath;
