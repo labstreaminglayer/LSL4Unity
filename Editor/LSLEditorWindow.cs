@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Assets.LSL4Unity.EditorExtensions
 {
-    public class LSLEditor : EditorWindow
+    public class LSLShowStreamsWindow : EditorWindow
     {
         public double WaitOnResolveStreams = 2;
 
@@ -24,10 +24,14 @@ namespace Assets.LSL4Unity.EditorExtensions
         public void Init()
         {
             resolver = new liblsl.ContinuousResolver();
-            var lib_major = liblsl.library_version() / 100;
-            var lib_minor = liblsl.library_version() % 100;
-            var prot_major = liblsl.protocol_version() / 100;
-            var prot_minor = liblsl.protocol_version() % 100;
+
+            var libVersion = liblsl.library_version();
+            var protocolVersion = liblsl.protocol_version();
+
+            var lib_major = libVersion / 100;
+            var lib_minor = libVersion % 100;
+            var prot_major = protocolVersion / 100;
+            var prot_minor = protocolVersion % 100;
 
             lslVersionInfos = string.Format("You are using LSL library: {0}.{1} implementing protocol version: {2}.{3}", lib_major, lib_minor, prot_major, prot_minor);
             

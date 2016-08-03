@@ -16,7 +16,7 @@ namespace Assets.LSL4Unity.EditorExtensions
         [MenuItem("LSL/Show Streams")]
         static void OpenLSLWindow()
         {
-            var window = EditorWindow.GetWindow<LSLEditor>(true);
+            var window = EditorWindow.GetWindow<LSLShowStreamsWindow>(true);
 
             window.Init();
 
