@@ -19,11 +19,18 @@ namespace Assets.LSL4Unity.EditorExtensions
         private string streamLookUpResult;
 
         private liblsl.ContinuousResolver resolver;
+        private string lslVersionInfos;
 
         public void Init()
         {
             resolver = new liblsl.ContinuousResolver();
+            var lib_major = liblsl.library_version() / 100;
+            var lib_minor = liblsl.library_version() % 100;
+            var prot_major = liblsl.protocol_version() / 100;
+            var prot_minor = liblsl.protocol_version() % 100;
 
+            lslVersionInfos = string.Format("You are using LSL library: {0}.{1} implementing protocol version: {2}.{3}", lib_major, lib_minor, prot_major, prot_minor);
+            
             this.titleContent = new GUIContent("LSL Utility");
         }
 
@@ -34,21 +41,26 @@ namespace Assets.LSL4Unity.EditorExtensions
             if (resolver == null)
                 Init();
 
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
-
             UpdateStreams();
 
-            EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
+            EditorGUILayout.BeginVertical();
 
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField(lslVersionInfos, EditorStyles.miniLabel);
+
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.LabelField(streamLookUpResult, EditorStyles.boldLabel);
+            
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
             EditorGUILayout.Separator();
 
-            scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(150));
+            scrollVector = EditorGUILayout.BeginScrollView(scrollVector, GUILayout.Width(EditorGUIUtility.currentViewWidth));
             GUILayoutOption fieldWidth = GUILayout.Width(EditorGUIUtility.currentViewWidth / 4.3f);
-            // GUILayoutOption[] parameter = new GUILayoutOption[]{ };
+
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Name", EditorStyles.boldLabel, fieldWidth);
@@ -71,15 +83,6 @@ namespace Assets.LSL4Unity.EditorExtensions
 
                 EditorGUILayout.EndHorizontal();
 
-                if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
-                {
-                    if (Event.current.type == EventType.MouseUp)
-                    {
-                        Debug.Log("Mouse click on :" + item);
-
-
-                    }
-                }
             }
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
