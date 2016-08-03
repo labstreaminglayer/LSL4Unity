@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace Assets.LSL4Unity.Scripts
 {
+    public enum MomentForSampling { Update, FixedUpdate, LateUpdate }
+
+
     public class LSLOutlet : MonoBehaviour
     {
         private liblsl.StreamOutlet outlet;
