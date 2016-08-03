@@ -31,7 +31,10 @@ namespace Assets.LSL4Unity.Demo
 
         public bool HasConsumer()
         {
-            return outlet.have_consumers();
+            if(outlet != null)
+                return outlet.have_consumers();
+
+            return false;
         }
 
         public string StreamName = "BeMoBI.Unity.Orientation.<Add_a_entity_id_here>";
