@@ -54,7 +54,7 @@ namespace Assets.LSL4Unity.Editor {
 
         private static void RenameLibFile(string pluginDirectory , string sourceName, string nameOfObsoleteFile, string fileEnding)
         {
-            var obsoleteFile = Path.Combine(pluginDirectory, nameOfObsoleteFile);
+            var obsoleteFile = Path.Combine(pluginDirectory, nameOfObsoleteFile + fileEnding);
 
             Debug.Log("[BUILD] Delete obsolete file: " + obsoleteFile);
 
