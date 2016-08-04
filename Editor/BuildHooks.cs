@@ -11,10 +11,6 @@ namespace Assets.LSL4Unity.Editor {
         const string LIB_LSL_NAME = "liblsl";
         const string PLUGIN_DIR = "Plugins";
 
-        const string DLL_ENDING = ".dll";
-        const string SO_ENDING = ".so";
-        const string BUNDLE_ENDING = ".bundle";
-
         [PostProcessBuildAttribute(1)]
         public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
         {
@@ -30,29 +26,29 @@ namespace Assets.LSL4Unity.Editor {
 
             if (target == BuildTarget.StandaloneWindows)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, DLL_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, LSLEditorIntegration.DLL_ENDING);
             }
             else if(target == BuildTarget.StandaloneWindows64)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, DLL_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.DLL_ENDING);
             }
 
             if (target == BuildTarget.StandaloneLinux)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, SO_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, LSLEditorIntegration.SO_ENDING);
             }
             else if (target == BuildTarget.StandaloneLinux64)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, SO_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.SO_ENDING);
             }
 
             if (target == BuildTarget.StandaloneOSXIntel)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, BUNDLE_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, LSLEditorIntegration.BUNDLE_ENDING);
             }
             else if (target == BuildTarget.StandaloneOSXIntel64)
             {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, BUNDLE_ENDING);
+                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.BUNDLE_ENDING);
             }
         }
 

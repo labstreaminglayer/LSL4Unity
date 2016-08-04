@@ -7,8 +7,13 @@ namespace Assets.LSL4Unity.EditorExtensions
     public class LSLEditorIntegration
     {
         public static readonly string wikiURL = "https://github.com/xfleckx/LSL4Unity/wiki";
-        public static readonly string lib64Name = "liblsl64.dll";
-        public static readonly string lib32Name = "liblsl32.dll";
+        public static readonly string lib64Name = "liblsl64";
+        public static readonly string lib32Name = "liblsl32";
+        
+        public const string DLL_ENDING = ".dll";
+        public const string SO_ENDING = ".so";
+        public const string BUNDLE_ENDING = ".bundle";
+
         static readonly string wrapperFileName = "LSL.cs";
         static readonly string assetSubFolder = "LSL4Unity";
         static readonly string libFolder = assetSubFolder + @"/lib";
@@ -32,8 +37,15 @@ namespace Assets.LSL4Unity.EditorExtensions
             bool lib32Available = false;
             bool apiAvailable = false;
 
-            lib32Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name)));
-            lib64Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name)));
+            lib32Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name + DLL_ENDING)));
+            lib64Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name + DLL_ENDING)));
+
+            lib32Available &= File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name + SO_ENDING)));
+            lib64Available &= File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name + SO_ENDING)));
+
+            lib32Available &= File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name + BUNDLE_ENDING)));
+            lib64Available &= File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name + BUNDLE_ENDING)));
+
             apiAvailable = File.Exists(Path.Combine(root, Path.Combine(assetSubFolder, wrapperFileName)));
 
             if ((lib64Available || lib32Available) && apiAvailable)
