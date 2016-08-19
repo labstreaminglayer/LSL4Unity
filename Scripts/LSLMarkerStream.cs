@@ -18,9 +18,8 @@ namespace Assets.LSL4Unity.Scripts
         private const liblsl.channel_format_t lslChannelFormat = liblsl.channel_format_t.cf_string;
 
         private string[] sample;
-
-        // Use this for initialization
-        void Start()
+ 
+        void Awake()
         {
             sample = new string[lslChannelCount];
 
