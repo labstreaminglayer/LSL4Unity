@@ -386,8 +386,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 616749569}
   - 114: {fileID: 616749568}
+  - 114: {fileID: 616749570}
   m_Layer: 0
-  m_Name: LSLDemoOutlet
+  m_Name: LSLDemoOutlets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -422,6 +423,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &616749570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 616749567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01c23d6a1fd35524fbcfcb4c996f6439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSource: {fileID: 1685184794}
+  StreamName: BeMoBI.Unity.DemoCube
+  StreamType: Unity.Transform
+  StreamRotationAsQuaternion: 1
+  StreamRotationAsEuler: 1
+  StreamPosition: 1
 --- !u!1 &1472627653
 GameObject:
   m_ObjectHideFlags: 0
