@@ -14,7 +14,10 @@ namespace Assets.LSL4Unity.Scripts
         private liblsl.StreamInfo lslStreamInfo;
         private liblsl.StreamOutlet lslOutlet;
         private int lslChannelCount = 1;
-        private double nominalRate = 0;
+
+        //Assuming that markers are never send in regular intervalls
+        private double nominal_srate = liblsl.IRREGULAR_RATE;
+
         private const liblsl.channel_format_t lslChannelFormat = liblsl.channel_format_t.cf_string;
 
         private string[] sample;
@@ -27,10 +30,10 @@ namespace Assets.LSL4Unity.Scripts
                                         lslStreamName,
                                         lslStreamType,
                                         lslChannelCount,
-                                        nominalRate,
+                                        nominal_srate,
                                         lslChannelFormat,
                                         unique_source_id);
-
+            
             lslOutlet = new liblsl.StreamOutlet(lslStreamInfo);
         }
 
