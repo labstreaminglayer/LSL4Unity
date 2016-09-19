@@ -50,11 +50,7 @@ namespace Assets.LSL4Unity.Demo
             // initialize the array once
             currentSample = new float[ChannelCount];
 
-            if (sampling == MomentForSampling.FixedUpdate)
-                dataRate = Time.fixedDeltaTime;
-            
-            if (sampling == MomentForSampling.Update || sampling == MomentForSampling.LateUpdate)
-                dataRate = 1 / Application.targetFrameRate;
+            dataRate = LSLCommon.GetSamplingRateFor(sampling);
 
             streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, dataRate, liblsl.channel_format_t.cf_float32, unique_source_id);
 
