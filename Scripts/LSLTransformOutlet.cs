@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using LSL;
 using System.Collections.Generic;
+using Assets.LSL4Unity.Scripts.Common;
 
 namespace Assets.LSL4Unity.Scripts
 {
@@ -116,13 +117,6 @@ namespace Assets.LSL4Unity.Scripts
 
 
         #region workaround for channel creation
-
-        internal struct ChannelDefinition
-        {
-            internal string label;
-            internal string unit;
-            internal string type;
-        }
 
         private ICollection<ChannelDefinition> SetupChannels()
         {

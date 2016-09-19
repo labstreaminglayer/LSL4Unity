@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 
-namespace Assets.LSL4Unity.Scripts
+namespace Assets.LSL4Unity.Scripts.Common
 {
-    public static class LSLCommon
+    public static class LSLUtils
     {
         private const int DEFAULT_PLATTFORM_SPECIFIC_FRAMERATE = -1;
 
@@ -32,4 +32,12 @@ namespace Assets.LSL4Unity.Scripts
             return samplingRateInHertz;
         }
     }
+    
+    public struct ChannelDefinition
+    {
+        public string label;
+        public string unit;
+        public string type;
+    }
+
 }

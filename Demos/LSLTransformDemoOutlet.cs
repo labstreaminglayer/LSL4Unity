@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using LSL;
 using Assets.LSL4Unity.Scripts;
+using Assets.LSL4Unity.Scripts.Common;
 
 namespace Assets.LSL4Unity.Demo
 {
@@ -50,7 +51,7 @@ namespace Assets.LSL4Unity.Demo
             // initialize the array once
             currentSample = new float[ChannelCount];
 
-            dataRate = LSLCommon.GetSamplingRateFor(sampling);
+            dataRate = LSLUtils.GetSamplingRateFor(sampling);
 
             streamInfo = new liblsl.StreamInfo(StreamName, StreamType, ChannelCount, dataRate, liblsl.channel_format_t.cf_float32, unique_source_id);
 
