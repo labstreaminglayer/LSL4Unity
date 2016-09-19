@@ -12,6 +12,19 @@ Also, see the [Tips](https://github.com/xfleckx/LSL4Unity/wiki/Tips-for-using-LS
 This is still under active development, so if something did not work properly stay calm, create an issue on github.
 Contributions are welcome!
 
+**LSL ships a C# wrapper for the LSL lib - why should I use an additional wrapper?**
+
+Good question - LSL4Unity tries to provide an enhanced user experience within Unity.
+It is intented to solve several issues,
+* instable framerates results in irregular sampling intervalls
+* plattform dependent compilation
+
+when using an Game Engine - in this case Unity - as a data provider within your experiments.
+
+We also try to provide an easy start with predefined implementations which supports a integration into the EEGLAB, BCILAB and MoBILAB ecosystem. **Far from finished :X**
+ 
+
+
 # Compatibility info
 Currently LSL ~~works only with x64 builds~~ might work x64 and x86 builds of Unity3D projects!
 I got the whole thing running on both platforms under Windows. 
