@@ -21,6 +21,7 @@ namespace Assets.LSL4Unity.Scripts.Common
                     throw new InvalidOperationException("When using Update or LateUpdate as sampling moment - specify a target frameRate");
                 else if (setRefreshRateToDisplay)
                 {
+                    Debug.LogWarning("Application.targetFrameRate get set to Screen.currentResolution.refreshRate!");
                     Application.targetFrameRate = Screen.currentResolution.refreshRate;
                 }
 
