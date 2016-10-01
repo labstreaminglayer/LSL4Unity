@@ -4,6 +4,7 @@ using LSL;
 
 namespace Assets.LSL4Unity.Scripts
 {
+    [HelpURL("https://github.com/xfleckx/LSL4Unity/wiki#using-a-marker-stream")]
     public class LSLMarkerStream : MonoBehaviour
     {
         private const string unique_source_id = "D3F83BB699EB49AB94A9FA44B88882AB";
@@ -48,16 +49,13 @@ namespace Assets.LSL4Unity.Scripts
             sample[0] = marker;
             lslOutlet.push_sample(sample, customTimeStamp);
         }
-
-        private string pendingMarker;
-
+        
         public void WriteBeforeFrameIsDisplayed(string marker)
         {
-            pendingMarker = marker;
-            StartCoroutine(WriteMarkerAfterImageIsRendered());
+            StartCoroutine(WriteMarkerAfterImageIsRendered(marker));
         }
 
-        IEnumerator WriteMarkerAfterImageIsRendered()
+        IEnumerator WriteMarkerAfterImageIsRendered(string pendingMarker)
         {
             yield return new WaitForEndOfFrame();
 
