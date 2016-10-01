@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor.Callbacks;
 using UnityEditor;
-using Assets.LSL4Unity.EditorExtensions;
 using System.IO;
 
-namespace Assets.LSL4Unity.Editor { 
+namespace Assets.LSL4Unity.EditorExtensions
+{ 
 
     public class BuildHooks {
 
