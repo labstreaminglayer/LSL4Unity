@@ -7,9 +7,9 @@ namespace Assets.LSL4Unity.Scripts
     /// So that each sample provided by an Unity3D app has the same timestamp 
     /// Important! Make sure that the script is called before the default execution order!
     /// </summary>
+    [ScriptOrder( -1000 )]
     public class LSLTimeSync : MonoBehaviour
     {
-
         private static LSLTimeSync instance;
         public static LSLTimeSync Instance
         {
