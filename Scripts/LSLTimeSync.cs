@@ -37,6 +37,12 @@ namespace Assets.LSL4Unity.Scripts
             }
         }
 
+        private double lateUpdateTimeStamp;
+        public double LateUpdateTimeStamp
+        {
+            get { return lateUpdateTimeStamp; }
+        }
+
         void Awake()
         {
             LSLTimeSync.instance = this;
@@ -50,6 +56,11 @@ namespace Assets.LSL4Unity.Scripts
         void Update()
         {
             updateTimeStamp = LSL.liblsl.local_clock();
+        }
+
+        void LateUpdate()
+        {
+            lateUpdateTimeStamp = LSL.liblsl.local_clock();
         }
     }
 }
