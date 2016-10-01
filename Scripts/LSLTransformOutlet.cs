@@ -28,7 +28,7 @@ namespace Assets.LSL4Unity.Scripts
         public Transform sampleSource;
 
         public string StreamName = "BeMoBI.Unity.Orientation.<Add_a_entity_id_here>";
-        public string StreamType = "Unity.Quarternion";
+        public string StreamType = "Unity.Quaternion";
        
         public bool StreamRotationAsQuaternion = true;
         public bool StreamRotationAsEuler = true;
