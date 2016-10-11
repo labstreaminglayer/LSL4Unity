@@ -44,12 +44,18 @@ namespace Assets.LSL4Unity.Scripts
             lslOutlet.push_sample(sample);
         }
 
+        public void Write(string marker, double customTimeStamp)
+        {
+            sample[0] = marker;
+            lslOutlet.push_sample(sample, customTimeStamp);
+        }
+
         public void Write(string marker, float customTimeStamp)
         {
             sample[0] = marker;
             lslOutlet.push_sample(sample, customTimeStamp);
         }
-        
+
         public void WriteBeforeFrameIsDisplayed(string marker)
         {
             StartCoroutine(WriteMarkerAfterImageIsRendered(marker));
