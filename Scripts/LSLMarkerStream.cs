@@ -49,6 +49,12 @@ namespace Assets.LSL4Unity.Scripts
             lslOutlet.push_sample(sample, customTimeStamp);
         }
 
+        public void Write(string marker, double customTimeStamp)
+        {
+            sample[0] = marker;
+            lslOutlet.push_sample(sample, customTimeStamp);
+        }
+
         private string pendingMarker;
 
         public void WriteBeforeFrameIsDisplayed(string marker)
