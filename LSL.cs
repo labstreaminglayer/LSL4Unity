@@ -917,6 +917,8 @@ namespace LSL
 			const string pathToAllLibs = "Assets/LSL4Unity/lib/";
 #elif UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
 			const string pathToAllLibs = "../Plugins/";
+#elif UNITY_ANDROID
+			const string pathToAllLibs = "";
 #endif
 
 #if (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
@@ -926,22 +928,20 @@ namespace LSL
 #elif UNITY_STANDALONE_WIN
 			// a build hook will took care that the correct dll will be renamed after a successfull build 
 			const string libname =  "liblsl.dll";
-#endif
-
-#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
+#elif (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
 		   const string libname = "liblsl64.so";
 #elif UNITY_EDITOR_LINUX
 		   const string libname =  "liblsl32.so";
 #elif UNITY_STANDALONE_LINUX
 		   const string libname =  "liblsl.so";
-#endif
-
-#if (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
+#elif (Unity_EDITOR_OSX && UNITY_EDITOR_64) || UNITY_STANDALONE_OSX
 		   const string libname = "liblsl64.bundle";
 #elif Unity_EDITOR_OSX
 		   const string libname = "liblsl32.bundle";
 #elif UNITY_STANDALONE_OSX
 		   const string libname =  "liblsl.bundle";
+#elif UNITY_ANDROID
+		   const string libname =  "lslAndroid";
 #endif
 
 			const string pathToLib = pathToAllLibs + libname;
