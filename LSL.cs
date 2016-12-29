@@ -64,13 +64,30 @@ public class liblsl
     };
 
     /**
-    * Protocol version.
-    * The major version is protocol_version() / 100;
-    * The minor version is protocol_version() % 100;
-    * Clients with different minor versions are protocol-compatible with each other 
-    * while clients with different major versions will refuse to work together.
+    * Post-processing options for stream inlets. 
     */
-    public static int protocol_version() { return dll.lsl_protocol_version(); }
+    public enum processing_options_t : byte
+    {
+        post_none = 0,          // No automatic post-processing; return the ground-truth time stamps for manual post-processing
+                                // (this is the default behavior of the inlet).
+        post_clocksync = 1,     // Perform automatic clock synchronization; equivalent to manually adding the time_correction() value
+                                // to the received time stamps.
+        post_dejitter = 2,      // Remove jitter from time stamps. This will apply a smoothing algorithm to the received time stamps;
+                                // the smoothing needs to see a minimum number of samples (30-120 seconds worst-case) until the remaining  
+                                // jitter is consistently below 1ms.
+        post_monotonize = 4,    // Force the time-stamps to be monotonically ascending (only makes sense if timestamps are dejittered).
+        post_threadsafe = 8,    // Post-processing is thread-safe (same inlet can be read from by multiple threads); uses somewhat more CPU.
+        post_ALL = 1 | 2 | 4 | 8// The combination of all possible post-processing options.
+    };
+
+        /**
+        * Protocol version.
+        * The major version is protocol_version() / 100;
+        * The minor version is protocol_version() % 100;
+        * Clients with different minor versions are protocol-compatible with each other 
+        * while clients with different major versions will refuse to work together.
+        */
+        public static int protocol_version() { return dll.lsl_protocol_version(); }
 
     /**
     * Version of the liblsl library.
@@ -546,6 +563,17 @@ public class liblsl
         */
         public void open_stream() { open_stream(FOREVER); }
         public void open_stream(double timeout) { int ec = 0; dll.lsl_open_stream(obj, timeout, ref ec); check_error(ec); }
+
+        /**
+        * Set post-processing flags to use. By default, the inlet performs NO post-processing and returns the 
+        * ground-truth time stamps, which can then be manually synchronized using time_correction(), and then 
+        * smoothed/dejittered if desired. This function allows automating these two and possibly more operations.
+        * Warning: when you enable this, you will no longer receive or be able to recover the original time stamps.
+        * @param flags An integer that is the result of bitwise OR'ing one or more options from processing_options_t 
+        *        together (e.g., post_clocksync|post_dejitter); the default is to enable all options.
+        */
+        public void set_postprocessing() { set_postprocessing(processing_options_t.post_ALL); }
+        public void set_postprocessing(processing_options_t post_flags) { dll.lsl_set_postprocessing(obj, post_flags); }
  
         /**
         * Drop the current data stream.
@@ -1085,6 +1113,9 @@ public class liblsl
 
 		[DllImport(pathToLib, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
 		public static extern void lsl_open_stream(IntPtr obj, double timeout, ref int ec);
+		
+		[DllImport(pathToLib, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
+		public static extern void lsl_set_postprocessing(IntPtr obj, processing_options_t processing_flags);
 
 		[DllImport(pathToLib, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
 		public static extern void lsl_close_stream(IntPtr obj);
