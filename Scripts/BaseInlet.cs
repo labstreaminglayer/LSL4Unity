@@ -64,7 +64,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
             Debug.Log(string.Format("LSL Stream {0} Lost for {1}", stream.Name, name));
 
-            this.enabled = false;
+            OnStreamLost();
         }
 
         protected virtual bool isTheExpected(LSLStreamInfoWrapper stream)
