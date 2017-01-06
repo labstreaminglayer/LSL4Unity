@@ -21,6 +21,8 @@ namespace Assets.LSL4Unity.Scripts.Examples {
         public bool useY;
         public bool useZ;
 
+        private bool pullSamplesContinuously = false;
+
 
         void Start()
         {
@@ -63,24 +65,18 @@ namespace Assets.LSL4Unity.Scripts.Examples {
 
         protected override void OnStreamAvailable()
         {
-            StartCoroutine(continuouslyPull());
+            pullSamplesContinuously = true;
         }
 
-        private IEnumerator continuouslyPull()
+        protected override void OnStreamLost()
         {
-            do
-            {
-                pullSamples();
-                // let Unity do other things while waiting for new samples...
-                yield return new WaitForFixedUpdate();
-
-            } while (true);
+            pullSamplesContinuously = false;
         }
          
         private void Update()
         {
-            // another option to sample within an update procedure
-            // pullSamples();
+            if(pullSamplesContinuously)
+                pullSamples();
         }
     }
 }

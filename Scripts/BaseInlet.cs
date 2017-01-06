@@ -9,9 +9,9 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
     public abstract class ABaseInlet : MonoBehaviour
     {
         public string StreamName;
-
+        
         public string StreamType;
-
+        
         protected liblsl.StreamInlet inlet;
 
         protected int expectedChannels;
@@ -44,6 +44,8 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
         {
             if (!isTheExpected(stream))
                 return;
+
+            Debug.Log(string.Format("LSL Stream {0} found for {1}", stream.Name, name));
 
             inlet = new LSL.liblsl.StreamInlet(stream.Item);
             expectedChannels = stream.ChannelCount;
@@ -80,7 +82,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             // base implementation may not decide what happens when the stream gets available
             throw new NotImplementedException("Please override this method in a derived class!");
         }
-        
+
+        protected virtual void OnStreamLost()
+        {
+            // base implementation may not decide what happens when the stream gets lost
+            throw new NotImplementedException("Please override this method in a derived class!");
+        }
     }
 
     public abstract class InletFloatSamples : ABaseInlet
