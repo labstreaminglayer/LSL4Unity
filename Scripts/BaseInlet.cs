@@ -1,6 +1,8 @@
 ﻿using LSL;
 using System;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.LSL4Unity.Scripts.AbstractInlets
 {
@@ -13,6 +15,26 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
         protected liblsl.StreamInlet inlet;
 
         protected int expectedChannels;
+
+        protected Resolver resolver;
+
+        /// <summary>
+        /// Call this method when your inlet implementation got created at runtime
+        /// </summary>
+        protected virtual void registerAndLookUpStream()
+        {
+            resolver = FindObjectOfType<Resolver>();
+
+            resolver.onStreamFound.AddListener(new UnityAction<LSLStreamInfoWrapper>(AStreamIsFound));
+
+            resolver.onStreamLost.AddListener(new UnityAction<LSLStreamInfoWrapper>(AStreamGotLost));
+            
+            if (resolver.knownStreams.Any(isTheExpected))
+            {
+                var stream = resolver.knownStreams.First(isTheExpected);
+                AStreamIsFound(stream);
+            }
+        }
 
         /// <summary>
         /// Callback method for the Resolver gets called each time the resolver found a stream
@@ -43,9 +65,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             this.enabled = false;
         }
 
-        private bool isTheExpected(LSLStreamInfoWrapper stream)
+        protected virtual bool isTheExpected(LSLStreamInfoWrapper stream)
         {
-            return StreamName.Equals(stream.Name);
+            bool predicate = StreamName.Equals(stream.Name);
+            predicate &= StreamType.Equals(stream.Type);
+
+            return predicate;
         }
 
         protected abstract void pullSamples();
@@ -55,6 +80,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             // base implementation may not decide what happens when the stream gets available
             throw new NotImplementedException("Please override this method in a derived class!");
         }
+        
     }
 
     public abstract class InletFloatSamples : ABaseInlet
