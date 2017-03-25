@@ -56,7 +56,7 @@ namespace Assets.LSL4Unity.EditorExtensions
         {
             var obsoleteFile = Path.Combine(pluginDirectory, nameOfObsoleteFile + fileEnding);
 
-            Debug.Log("[BUILD] Delete obsolete file: " + obsoleteFile);
+            Debug.Log("[LSL BUILD Hook] Delete obsolete file: " + obsoleteFile);
 
             File.Delete(obsoleteFile);
 
@@ -64,7 +64,7 @@ namespace Assets.LSL4Unity.EditorExtensions
 
             var targetFile = Path.Combine(pluginDirectory, LIB_LSL_NAME + fileEnding);
             
-            Debug.Log(string.Format("[BUILD] Renaming: {0} to {1}", sourceFile, targetFile));
+            Debug.Log(string.Format("[LSL BUILD Hook] Renaming: {0} to {1}", sourceFile, targetFile));
 
             File.Move(sourceFile, targetFile);
         }
