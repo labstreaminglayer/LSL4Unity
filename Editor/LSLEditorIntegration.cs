@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Linq;
+using UnityEngine.Assertions;
 
 namespace Assets.LSL4Unity.EditorExtensions
 {
@@ -40,8 +42,9 @@ namespace Assets.LSL4Unity.EditorExtensions
 
             var results = Directory.GetDirectories(assetDirectory, assetSubFolder, SearchOption.AllDirectories);
 
-            var root = results[0];
-            
+            Assert.IsTrue(results.Any(), "Expecting a directory named: '" + assetSubFolder + "' containing the content inlcuding this script! Did you renamed it?");
+
+            var root = results.Single();
 
             lib32Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib32Name + DLL_ENDING)));
             lib64Available = File.Exists(Path.Combine(root, Path.Combine(libFolder, lib64Name + DLL_ENDING)));
