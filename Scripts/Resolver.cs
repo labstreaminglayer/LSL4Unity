@@ -79,7 +79,7 @@ namespace Assets.LSL4Unity.Scripts
                 // add new found streams to the cache
                 foreach (var item in results)
                 {
-                    if (!knownStreams.Any(s => s.Name == item.name()))
+                    if (!knownStreams.Any(s => s.Name == item.name() && s.Type == item.type()))
                     {
 
                         Debug.Log(string.Format("Found new Stream {0}", item.name()));
