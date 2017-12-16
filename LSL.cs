@@ -944,9 +944,9 @@ public class liblsl
 	   const string libname =  "liblsl.so";
 #elif Unity_EDITOR_OSX || UNITY_STANDALONE_OSX
 	   //32-bit dylib no longer provided.
-	   const string libname = "liblsl64.bundle";
+	   const string libname = "liblsl64";
 #elif UNITY_STANDALONE_OSX
-	   const string libname = "liblsl.bundle";
+	   const string libname = "liblsl";
 #elif UNITY_ANDROID
 	   const string libname = "lslAndroid";
 #endif
