@@ -13,7 +13,7 @@ using System.Linq;
 /// Getting all samples available in at the moment of the update call (Update/FixedUpdate).
 /// Samples won't get cached or queue.
 /// 
-/// Will try to connect until success in FixedUpdate
+/// Will try to connect until success in FixedUpdate (FIXME: FloatInlet only at the moment!)
 /// TODO: handle disconnect?
 /// </summary>
 namespace Assets.LSL4Unity.Scripts.AbstractInlets
