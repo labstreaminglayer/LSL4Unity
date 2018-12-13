@@ -902,25 +902,26 @@ public class liblsl
     {
 
 #if (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
-		const string libname = "liblsl64";
+            const string libname = "liblsl64";
 #elif UNITY_EDITOR_WIN
-		const string libname = "liblsl32";
+            const string libname = "liblsl32";
 #elif UNITY_STANDALONE_WIN
-		// a build hook will took care that the correct dll will be renamed after a successfull build 
-		const string libname =  "liblsl";
-#elif (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
-	   const string libname = "lsl64";
+            // a build hook will took care that the correct dll will be renamed after a successfull build 
+            const string libname =  "liblsl";
+#elif (UNITY_EDITOR_LINUX && UNITY_EDITOR_64)
+            const string libname = "lsl64";
 #elif UNITY_EDITOR_LINUX
-	   const string libname = "liblsl32.so";
+            const string libname = "liblsl32.so";
 #elif UNITY_STANDALONE_LINUX
-	   const string libname =  "liblsl.so";
+            // a build hook will took care that the correct dll will be renamed after a successfull build 
+            const string libname =  "lsl";
 #elif Unity_EDITOR_OSX || UNITY_STANDALONE_OSX
-	   //32-bit dylib no longer provided.
-	   const string libname = "liblsl64.bundle";
+            //32-bit dylib no longer provided.
+            const string libname = "liblsl64.bundle";
 #elif UNITY_STANDALONE_OSX
-	   const string libname = "liblsl.bundle";
+            const string libname = "liblsl.bundle";
 #elif UNITY_ANDROID
-        const string libname = "liblsl32.dll";
+            const string libname = "liblsl32.dll";
 #endif
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
