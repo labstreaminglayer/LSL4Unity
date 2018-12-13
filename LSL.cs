@@ -909,7 +909,7 @@ public class liblsl
 		// a build hook will took care that the correct dll will be renamed after a successfull build 
 		const string libname =  "liblsl";
 #elif (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
-	   const string libname = "liblsl64.so";
+	   const string libname = "lsl64";
 #elif UNITY_EDITOR_LINUX
 	   const string libname = "liblsl32.so";
 #elif UNITY_STANDALONE_LINUX
