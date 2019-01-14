@@ -4,6 +4,9 @@ using LSL;
 using System;
 using System.Linq;
 
+/// Will try to connect until success in FixedUpdate
+/// TODO: handle disconnect?
+
 /// <summary>
 /// DO NOT CHANGE CLASSES WITHIN THESE NAMESPACE
 /// 
@@ -13,8 +16,6 @@ using System.Linq;
 /// Getting all samples available in at the moment of the update call (Update/FixedUpdate).
 /// Samples won't get cached or queue.
 /// 
-/// Will try to connect until success in FixedUpdate (FIXME: FloatInlet only at the moment!)
-/// TODO: handle disconnect?
 /// </summary>
 namespace Assets.LSL4Unity.Scripts.AbstractInlets
 {
@@ -161,8 +162,11 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
         public string StreamName;
 
         public string StreamType;
-
+        
+        // list of streams
         liblsl.StreamInfo[] results;
+        // currently trying to resolve streams
+        bool resolvingStream = false;
         liblsl.StreamInlet inlet;
         liblsl.ContinuousResolver resolver;
 
@@ -195,6 +199,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
 
             StartCoroutine(ResolveExpectedStream());
+            StartCoroutine(WaitForStream());
 
             AdditionalStart();
         }
@@ -208,25 +213,28 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         IEnumerator ResolveExpectedStream()
         {
+            // FIXME: find a better way to lock this function
+            resolvingStream = true;
             var results = resolver.results();
-
+            resolvingStream = false;
+            yield return null;
+        }
+        
+        IEnumerator WaitForStream()
+        {
             while (inlet == null)
             {
 
                 yield return new WaitUntil(() => results.Length > 0);
 
-                inlet = new liblsl.StreamInlet(GetStreamInfoFrom(results));
+                Debug.Log(string.Format("Resolving Stream: {0}", StreamName));
+
+                inlet = new liblsl.StreamInlet(results[0]);
 
                 expectedChannels = inlet.info().channel_count();
             }
 
             yield return null;
-        }
-
-        private liblsl.StreamInfo GetStreamInfoFrom(liblsl.StreamInfo[] results)
-        {
-            var targetInfo = results.Where(r => r.name().Equals(StreamName)).First();
-            return targetInfo;
         }
 
         protected void pullSamples()
@@ -266,6 +274,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         void FixedUpdate()
         {
+            // check for connection if needed
+            if (inlet == null && !resolvingStream)
+            {
+                StartCoroutine(ResolveExpectedStream());
+            }
+            
             if (moment == UpdateMoment.FixedUpdate && inlet != null)
                 pullSamples();
         }
@@ -287,7 +301,10 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         public string StreamType;
 
+        // list of streams
         liblsl.StreamInfo[] results;
+        // currently trying to resolve streams
+        bool resolvingStream = false;
         liblsl.StreamInlet inlet;
         liblsl.ContinuousResolver resolver;
 
@@ -320,6 +337,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
 
             StartCoroutine(ResolveExpectedStream());
+            StartCoroutine(WaitForStream());
 
             AdditionalStart();
         }
@@ -334,9 +352,18 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         IEnumerator ResolveExpectedStream()
         {
+            // FIXME: find a better way to lock this function
+            resolvingStream = true;
             var results = resolver.results();
-
+            resolvingStream = false;
+            yield return null;
+        }
+ 
+        IEnumerator WaitForStream()
+        {
             yield return new WaitUntil(() => results.Length > 0);
+
+            Debug.Log(string.Format("Resolving Stream: {0}", StreamName));
 
             inlet = new liblsl.StreamInlet(results[0]);
 
@@ -382,6 +409,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         void FixedUpdate()
         {
+            // check for connection if needed
+            if (inlet == null && !resolvingStream)
+            {
+                StartCoroutine(ResolveExpectedStream());
+            }
+            
             if (moment == UpdateMoment.FixedUpdate && inlet != null)
                 pullSamples();
         }
@@ -403,7 +436,10 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         public string StreamType;
 
+        // list of streams
         liblsl.StreamInfo[] results;
+        // currently trying to resolve streams
+        bool resolvingStream = false;
         liblsl.StreamInlet inlet;
         liblsl.ContinuousResolver resolver;
 
@@ -436,6 +472,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
 
             StartCoroutine(ResolveExpectedStream());
+            StartCoroutine(WaitForStream());
 
             AdditionalStart();
         }
@@ -449,10 +486,22 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         IEnumerator ResolveExpectedStream()
         {
+            // FIXME: find a better way to lock this function
+            resolvingStream = true;
+            results = resolver.results();
+            resolvingStream = false;
+            yield return null;
+        }
+ 
+        IEnumerator WaitForStream()
+        {
             var results = resolver.results();
 
             yield return new WaitUntil(() => results.Length > 0);
 
+            Debug.Log(string.Format("Resolving Stream: {0}", StreamName));
+
+                        
             inlet = new liblsl.StreamInlet(results[0]);
 
             expectedChannels = inlet.info().channel_count();
@@ -497,6 +546,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         void FixedUpdate()
         {
+            // check for connection if needed
+            if (inlet == null && !resolvingStream)
+            {
+                StartCoroutine(ResolveExpectedStream());
+            }
+            
             if (moment == UpdateMoment.FixedUpdate && inlet != null)
                 pullSamples();
         }
@@ -518,7 +573,10 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         public string StreamType;
 
+        // list of streams
         liblsl.StreamInfo[] results;
+        // currently trying to resolve streams
+        bool resolvingStream = false;
         liblsl.StreamInlet inlet;
         liblsl.ContinuousResolver resolver;
 
@@ -551,6 +609,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
 
             StartCoroutine(ResolveExpectedStream());
+            StartCoroutine(WaitForStream());
 
             AdditionalStart();
         }
@@ -564,10 +623,22 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         IEnumerator ResolveExpectedStream()
         {
+           // FIXME: find a better way to lock this function
+            resolvingStream = true;
+            results = resolver.results();
+            resolvingStream = false;
+            yield return null;
+        }
+ 
+        IEnumerator WaitForStream()
+        {
             var results = resolver.results();
 
             yield return new WaitUntil(() => results.Length > 0);
 
+            Debug.Log(string.Format("Resolving Stream: {0}", StreamName));
+
+                        
             inlet = new liblsl.StreamInlet(results[0]);
 
             expectedChannels = inlet.info().channel_count();
@@ -612,6 +683,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         void FixedUpdate()
         {
+            // check for connection if needed
+            if (inlet == null && !resolvingStream)
+            {
+                StartCoroutine(ResolveExpectedStream());
+            }
+            
             if (moment == UpdateMoment.FixedUpdate && inlet != null)
                 pullSamples();
         }
@@ -633,7 +710,10 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         public string StreamType;
 
+        // list of streams
         liblsl.StreamInfo[] results;
+        // currently trying to resolve streams
+        bool resolvingStream = false;
         liblsl.StreamInlet inlet;
         liblsl.ContinuousResolver resolver;
 
@@ -666,6 +746,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             }
 
             StartCoroutine(ResolveExpectedStream());
+            StartCoroutine(WaitForStream());
 
             AdditionalStart();
         }
@@ -678,10 +759,21 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
         }
 
         IEnumerator ResolveExpectedStream()
+{
+            // FIXME: find a better way to lock this function
+            resolvingStream = true;
+            results = resolver.results();
+            resolvingStream = false;
+            yield return null;
+        }
+ 
+        IEnumerator WaitForStream()
         {
             var results = resolver.results();
 
             yield return new WaitUntil(() => results.Length > 0);
+
+            Debug.Log(string.Format("Resolving Stream: {0}", StreamName));
 
             inlet = new liblsl.StreamInlet(results[0]);
 
@@ -727,6 +819,12 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
         void FixedUpdate()
         {
+            // check for connection if needed
+            if (inlet == null && !resolvingStream)
+            {
+                StartCoroutine(ResolveExpectedStream());
+            }
+            
             if (moment == UpdateMoment.FixedUpdate && inlet != null)
                 pullSamples();
         }
