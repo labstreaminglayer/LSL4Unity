@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Collections;
 
+#define LSL4UnityLibrary
+
 /**
 * C# API for the lab streaming layer.
 * 
