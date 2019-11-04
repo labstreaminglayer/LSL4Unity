@@ -60,7 +60,7 @@ namespace Assets.LSL4Unity.Scripts.Examples {
             float z = useZ ? newSample[i] : 1;
 
             // we map the data to the scale factors
-            var targetScale = new Vector3(x, y, z);
+            var targetScale = new Vector3(x, y, z)*Multiplier;
 
             // apply the rotation to the target transform
             targetTransform.localScale = targetScale;
