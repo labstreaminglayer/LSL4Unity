@@ -1,4 +1,4 @@
-﻿using System.Collections; 
+using System.Collections; 
 using UnityEngine; 
 using Assets.LSL4Unity.Scripts.AbstractInlets;
 
@@ -16,12 +16,12 @@ namespace Assets.LSL4Unity.Scripts.Examples {
     public class DemoInletForFloatSamples : InletFloatSamples
     {
         public Transform targetTransform;
-
+        public float Multiplier = 5f;
         public bool useX;
         public bool useY;
         public bool useZ;
-
-        private bool pullSamplesContinuously = false;
+        public bool assume3FloatStream = true;
+        private bool pullSamplesContinuously = true;
 
 
         void Start()
@@ -51,10 +51,13 @@ namespace Assets.LSL4Unity.Scripts.Examples {
         /// <param name="timeStamp"></param>
         protected override void Process(float[] newSample, double timeStamp)
         {
+            int i = 0;
             //Assuming that a sample contains at least 3 values for x,y,z
-            float x = useX ? newSample[0] : 1;
-            float y = useY ? newSample[1] : 1;
-            float z = useZ ? newSample[2] : 1;
+            float x = useX ? newSample[i] : 1;
+            i = (useX||assume3FloatStream) ? 1:0;
+            float y = useY ? newSample[i] : 1;
+            i = ((useX&&useY)||assume3FloatStream) ? 2 : (useX||useY)? 1: 0;
+            float z = useZ ? newSample[i] : 1;
 
             // we map the data to the scale factors
             var targetScale = new Vector3(x, y, z);
