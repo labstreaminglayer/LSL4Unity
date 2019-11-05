@@ -21,7 +21,7 @@ namespace Assets.LSL4Unity.Scripts.Examples {
         public bool useY;
         public bool useZ;
         public bool assume3FloatStream = true;
-        private bool pullSamplesContinuously = true;
+        private bool pullSamplesContinuously = false;
 
 
         void Start()
