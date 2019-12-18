@@ -1,13 +1,11 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+﻿using UnityEditor;
 using Assets.LSL4Unity.Scripts;
 
 
 namespace Assets.LSL4Unity.EditorExtensions
 {
     [CustomEditor(typeof(LSLTimeSync))]
-    public class TimeSyncEditor : Editor
+    public class TimeSyncEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

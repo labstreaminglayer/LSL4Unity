@@ -33,20 +33,12 @@ namespace Assets.LSL4Unity.EditorExtensions
                 RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.DLL_ENDING);
             }
 
-            if (target == BuildTarget.StandaloneLinux)
-            {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, LSLEditorIntegration.SO_ENDING);
-            }
-            else if (target == BuildTarget.StandaloneLinux64)
+            if (target == BuildTarget.StandaloneLinux64)
             {
                 RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.SO_ENDING);
             }
 
-            if (target == BuildTarget.StandaloneOSXIntel)
-            {
-                RenameLibFile(pluginDirectory, LSLEditorIntegration.lib32Name, LSLEditorIntegration.lib64Name, LSLEditorIntegration.BUNDLE_ENDING);
-            }
-            else if (target == BuildTarget.StandaloneOSXIntel64)
+            if (target == BuildTarget.StandaloneOSX)
             {
                 RenameLibFile(pluginDirectory, LSLEditorIntegration.lib64Name, LSLEditorIntegration.lib32Name, LSLEditorIntegration.BUNDLE_ENDING);
             }
