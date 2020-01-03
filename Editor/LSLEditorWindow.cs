@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using LSL;
 using System.Collections.Generic;
+using LSL4Unity;
 
 namespace Assets.LSL4Unity.EditorExtensions
 {

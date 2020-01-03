@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using LSL4Unity;
+using UnityEngine;
 
 namespace Assets.LSL4Unity.Scripts
 {
@@ -50,17 +51,17 @@ namespace Assets.LSL4Unity.Scripts
 
         void FixedUpdate()
         {
-            fixedUpdateTimeStamp = LSL.liblsl.local_clock();
+            fixedUpdateTimeStamp = liblsl.local_clock();
         }
 
         void Update()
         {
-            updateTimeStamp = LSL.liblsl.local_clock();
+            updateTimeStamp = liblsl.local_clock();
         }
 
         void LateUpdate()
         {
-            lateUpdateTimeStamp = LSL.liblsl.local_clock();
+            lateUpdateTimeStamp = liblsl.local_clock();
         }
     }
 }

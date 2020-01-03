@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using LSL;
+using LSL4Unity;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 

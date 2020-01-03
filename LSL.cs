@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 *   (for recording, viewing or experiment control).
 *
 */
-namespace LSL {
+namespace LSL4Unity {
 
 public class liblsl
 {

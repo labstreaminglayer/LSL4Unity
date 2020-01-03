@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LSL;
 using System;
 using System.Linq;
+using LSL4Unity;
 
 /// <summary>
 /// DO NOT CHANGE CLASSES WITHIN THESE NAMESPACE

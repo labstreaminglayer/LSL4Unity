@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LSL;
 using System.Diagnostics;
+using LSL4Unity;
 
 namespace Assets.LSL4Unity.Scripts
 {

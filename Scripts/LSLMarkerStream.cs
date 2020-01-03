@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LSL;
+using LSL4Unity;
 
 namespace Assets.LSL4Unity.Scripts
 {

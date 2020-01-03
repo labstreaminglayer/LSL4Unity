@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using LSL;
 using Assets.LSL4Unity.Scripts;
 using Assets.LSL4Unity.Scripts.Common;
+using LSL4Unity;
 
 namespace Assets.LSL4Unity.Demo
 {
