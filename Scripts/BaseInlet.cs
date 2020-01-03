@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
-using LSL4Unity;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Assets.LSL4Unity.Scripts.AbstractInlets
+namespace LSL4Unity.Scripts
 {
     public abstract class ABaseInlet : MonoBehaviour
     {

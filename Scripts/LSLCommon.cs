@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts.Common
+namespace LSL4Unity.Scripts
 {
     public static class LSLUtils
     {

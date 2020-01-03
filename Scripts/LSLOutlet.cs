@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Diagnostics;
-using LSL4Unity;
+﻿using System.Diagnostics;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts
+namespace LSL4Unity.Scripts
 {
     public enum MomentForSampling { Update, FixedUpdate, LateUpdate }
 

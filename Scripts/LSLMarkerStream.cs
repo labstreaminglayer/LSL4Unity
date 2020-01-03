@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using LSL4Unity;
+﻿using System.Collections;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts
+namespace LSL4Unity.Scripts
 {
     [HelpURL("https://github.com/xfleckx/LSL4Unity/wiki#using-a-marker-stream")]
     public class LSLMarkerStream : MonoBehaviour

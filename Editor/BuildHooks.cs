@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor.Callbacks;
+﻿using System.IO;
 using UnityEditor;
-using System.IO;
+using UnityEditor.Callbacks;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.Editor
 { 
 
     public class BuildHooks {
@@ -11,7 +11,7 @@ namespace Assets.LSL4Unity.EditorExtensions
         const string LIB_LSL_NAME = "liblsl";
         const string PLUGIN_DIR = "Plugins";
 
-        [PostProcessBuildAttribute(1)]
+        [PostProcessBuild(1)]
         public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
         {
             var buildName = Path.GetFileNameWithoutExtension(pathToBuiltProject);

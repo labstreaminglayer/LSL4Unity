@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.Editor
 {
     public class LSLEditorIntegration
     {

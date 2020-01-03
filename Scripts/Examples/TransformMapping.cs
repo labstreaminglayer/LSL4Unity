@@ -1,4 +1,4 @@
-﻿using Assets.LSL4Unity.Scripts.AbstractInlets;
+﻿using LSL4Unity.Scripts;
 using UnityEngine;
 
 public class TransformMapping : AFloatInlet

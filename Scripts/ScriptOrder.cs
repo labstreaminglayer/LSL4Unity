@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
-
-namespace Assets.LSL4Unity
+namespace LSL4Unity.Scripts
 {
     /// <summary>
     /// This attribute is used to define specific script execution orders when necessary!

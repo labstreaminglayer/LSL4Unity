@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using Assets.LSL4Unity.Scripts;
-using Assets.LSL4Unity.Scripts.Common;
-using LSL4Unity;
+﻿using LSL4Unity.Scripts;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Demo
+namespace LSL4Unity.Demos
 {
     /// <summary>
     /// An reusable example of an outlet which provides the orientation of an entity to LSL

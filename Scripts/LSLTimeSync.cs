@@ -1,7 +1,6 @@
-﻿using LSL4Unity;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts
+namespace LSL4Unity.Scripts
 {
     /// <summary>
     /// This singleton should provide an dedicated timestamp for each update call or fixed update LSL sample!

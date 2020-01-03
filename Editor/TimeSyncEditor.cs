@@ -1,8 +1,7 @@
-﻿using UnityEditor;
-using Assets.LSL4Unity.Scripts;
+﻿using LSL4Unity.Scripts;
+using UnityEditor;
 
-
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.Editor
 {
     [CustomEditor(typeof(LSLTimeSync))]
     public class TimeSyncEditor : UnityEditor.Editor

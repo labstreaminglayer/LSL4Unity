@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using Assets.LSL4Unity.Scripts;
 
-namespace Assets.LSL4Unity.Demo
+namespace LSL4Unity.Demos
 { 
     public class StreamInfo : MonoBehaviour
     {

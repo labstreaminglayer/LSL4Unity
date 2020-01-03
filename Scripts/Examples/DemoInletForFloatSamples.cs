@@ -1,8 +1,6 @@
-﻿using System.Collections; 
-using UnityEngine; 
-using Assets.LSL4Unity.Scripts.AbstractInlets;
+﻿using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts.Examples {
+namespace LSL4Unity.Scripts.Examples {
 
     /// <summary>
     /// Example that works with the Resolver component.

@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Linq;
-using Assets.LSL4Unity.Scripts.AbstractInlets;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts.Examples
+namespace LSL4Unity.Scripts.Examples
 {
     /// <summary>
     /// Just an example implementation for a Inlet recieving float values

@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
-using System;
 using System.Linq;
-using LSL4Unity;
+using UnityEngine;
 
 /// <summary>
 /// DO NOT CHANGE CLASSES WITHIN THESE NAMESPACE
@@ -13,7 +12,7 @@ using LSL4Unity;
 /// Getting all samples available in at the moment of the update call (Update/FixedUpdate).
 /// Samples won't get cached or queue.
 /// </summary>
-namespace Assets.LSL4Unity.Scripts.AbstractInlets
+namespace LSL4Unity.Scripts
 {
 	public abstract class AFloatInlet : MonoBehaviour
 	{

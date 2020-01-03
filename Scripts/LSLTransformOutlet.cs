@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Assets.LSL4Unity.Scripts.Common;
-using LSL4Unity;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-namespace Assets.LSL4Unity.Scripts
+namespace LSL4Unity.Scripts
 {
     /// <summary>
     /// An reusable example of an outlet which provides the orientation and world position of an entity of an Unity Scene to LSL
