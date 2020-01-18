@@ -36,5 +36,5 @@ Contributions are welcome! Just try to build the example scene on your platform 
 In the current Version, the Asset package ships a sligthly modified version of the C# LSL API and the plugin binaries.
 The LabStreaming Layer is original created by SCCN und could be found at <https://github.com/sccn/labstreaminglayer>.
 
-It's highly recommended to read the section about the [Time Synchronization](https://github.com/sccn/labstreaminglayer/wiki/TimeSynchronization.wiki) before building your own experiments!
+It's highly recommended to read the section about the [Time Synchronization](https://labstreaminglayer.readthedocs.io/info/time_synchronization.html) before building your own experiments!
 
