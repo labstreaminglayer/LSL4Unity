@@ -1,3 +1,5 @@
+LSL4Unity is no longer in active development. The recommended way to use LSL in unity is to follow the [Unity instructions in the liblsl-Csharp project](https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md). However, LSL4Unity still has some very useful examples of how to use LSL in Unity effectively.
+
 # LSL4Unity
 A integration approach of the LabStreamingLayer Framework for Unity3D providing the following features.
 
@@ -8,9 +10,6 @@ A integration approach of the LabStreamingLayer Framework for Unity3D providing 
 
 See the [Project Wiki](https://github.com/xfleckx/LSL4Unity/wiki) to get more details and installation instructions.
 Also, see the [Tips](https://github.com/xfleckx/LSL4Unity/wiki/Tips-for-using-LSL4Unity)!
-
-This is still under active development, so if something did not work properly stay calm, create an issue on github.
-Contributions are welcome!
 
 **LSL ships a C# wrapper for the LSL lib - why should I use an additional wrapper?**
 
@@ -23,8 +22,6 @@ when using an Game Engine - in this case Unity - as a data provider within your 
 
 We also try to provide an easy start with predefined implementations which supports a integration into the EEGLAB, BCILAB and MoBILAB ecosystem. **Far from finished :X**
  
-
-
 # Compatibility info
 Currently LSL ~~works only with x64 builds~~ might work x64 and x86 builds of Unity3D projects!
 I got the whole thing running on both platforms under Windows. 
