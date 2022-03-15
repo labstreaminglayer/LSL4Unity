@@ -1,0 +1,24 @@
+{
+    "name": "com.labstreaminglayer.lsl4unity",
+    "version": "1.16.0",
+    "description": "labstreaminglayer for Unity",
+    "displayName": "labstreaminglayer for Unity",
+    "unity": "2020.3",
+    "author": {
+        "name": "Chadwick Boulay",
+        "email": "chadwick.boulay@gmail.com"
+    },
+    "documentationUrl": "https://github.com/labstreaminglayer/LSL4Unity",
+    "samples": [
+        {
+            "displayName": "IncomingStreams",
+            "description": "Incoming Streams",
+            "path": "Samples~/IncomingStreams"
+        },
+        {
+            "displayName": "RotatingCube",
+            "description": "Rotating Cube Demo",
+            "path": "Samples~/RotatingCube"
+        }
+    ]
+}

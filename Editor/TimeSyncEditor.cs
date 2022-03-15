@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
-using Assets.LSL4Unity.Scripts;
+using LSL4Unity.Scripts;
 
 
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.EditorExtensions
 {
     [CustomEditor(typeof(LSLTimeSync))]
     public class TimeSyncEditor : Editor
