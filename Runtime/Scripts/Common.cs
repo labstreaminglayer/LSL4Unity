@@ -2,9 +2,11 @@
 using System;
 using System.Collections;
 
-namespace LSL4Unity.Scripts.Common
+namespace LSL4Unity.Utils
 {
-    public static class LSLUtils
+    public enum MomentForSampling { Update, FixedUpdate, LateUpdate, EndOfFrame }
+
+    public static class LSLCommon
     {
         private const int DEFAULT_PLATTFORM_SPECIFIC_FRAMERATE = -1;
         /// <summary>
@@ -49,5 +51,4 @@ namespace LSL4Unity.Scripts.Common
         public string unit;
         public string type;
     }
-
 }

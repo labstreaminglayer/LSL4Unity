@@ -1,22 +1,39 @@
 ﻿using LSL;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace LSL4Unity.Scripts.AbstractInlets
+namespace LSL4Unity.Utils
 {
-    public abstract class ABaseInlet : MonoBehaviour
+    public abstract class ABaseInlet<TData> : MonoBehaviour
     {
         public string StreamName;
         
         public string StreamType;
-        
+
+        // Set this to true to only pass the last sample in a chunk to Process.
+        public bool ProcessLastInChunkOnly = false;
+
+        // Duration, in seconds, of buffer passed to pull_chunk. This must be > than average frame interval.
+        double maxChunkDuration = 0.2;
+
+        // Hook in frame lifecycle in which to pull data.
+        public MomentForSampling moment;
+
         protected StreamInlet inlet;
+        public Resolver resolver;
+        protected double[] timestamp_buffer;
+        protected TData[,] data_buffer;
+        protected TData[] single_sample;
+        protected List<string> ChannelNames = new List<string>();
+        public virtual int ChannelCount { get { return ChannelNames.Count; } }
 
-        protected int expectedChannels;
-
-        protected Resolver resolver;
+        protected virtual void Start()
+        {
+            registerAndLookUpStream();
+        }
 
         /// <summary>
         /// Call this method when your inlet implementation got created at runtime
@@ -24,31 +41,59 @@ namespace LSL4Unity.Scripts.AbstractInlets
         protected virtual void registerAndLookUpStream()
         {
             resolver = FindObjectOfType<Resolver>();
+            if (resolver == null)
+            {
+                resolver = gameObject.AddComponent<Resolver>();
+            }
 
-            resolver.onStreamFound.AddListener(new UnityAction<LSLStreamInfoWrapper>(AStreamIsFound));
-
-            resolver.onStreamLost.AddListener(new UnityAction<LSLStreamInfoWrapper>(AStreamGotLost));
-            
+            // Check already-present streams.
             if (resolver.knownStreams.Any(isTheExpected))
             {
                 var stream = resolver.knownStreams.First(isTheExpected);
                 AStreamIsFound(stream);
             }
+
+            // Register callbacks for new streams or lost streams.
+            resolver.OnStreamFound += AStreamIsFound;
+            resolver.OnStreamLost += AStreamGotLost;
         }
 
         /// <summary>
         /// Callback method for the Resolver gets called each time the resolver found a stream
         /// </summary>
         /// <param name="stream"></param>
-        public virtual void AStreamIsFound(LSLStreamInfoWrapper stream)
+        public virtual void AStreamIsFound(StreamInfo stream_info)
         {
-            if (!isTheExpected(stream))
+            if (!isTheExpected(stream_info))
                 return;
 
-            Debug.Log(string.Format("LSL Stream {0} found for {1}", stream.Name, name));
+            Debug.Log(string.Format("LSL Stream {0} found for {1}", stream_info.name(), name));
 
-            inlet = new StreamInlet(stream.Item);
-            expectedChannels = stream.ChannelCount;
+            inlet = new StreamInlet(stream_info);
+            int buf_samples = (int)Mathf.Ceil((float)(inlet.info().nominal_srate() * maxChunkDuration));
+            int nChannels = inlet.info().channel_count();
+
+            timestamp_buffer = new double[buf_samples];
+            data_buffer = new TData[buf_samples, nChannels];
+            single_sample = new TData[nChannels];
+
+            XMLElement channels = inlet.info().desc().child("channels");
+            if (!channels.empty())
+            {
+                
+                XMLElement chan = channels.first_child();
+                while (!chan.empty())
+                {
+                    // Read chan
+                    ChannelNames.Add(chan.child_value("label"));
+                    chan = chan.next_sibling();
+                }
+            }
+            // Pad with empty strings to make ChannelNames length == nChannels.
+            for (int chan_ix = ChannelNames.Count; chan_ix < nChannels; chan_ix++)
+            {
+                ChannelNames.Add("Chan" + chan_ix);
+            }
 
             OnStreamAvailable();
         }
@@ -57,25 +102,42 @@ namespace LSL4Unity.Scripts.AbstractInlets
         /// Callback method for the Resolver gets called each time the resolver misses a stream within its cache
         /// </summary>
         /// <param name="stream"></param>
-        public virtual void AStreamGotLost(LSLStreamInfoWrapper stream)
+        public virtual void AStreamGotLost(StreamInfo stream_info)
         {
-            if (!isTheExpected(stream))
+            if (!isTheExpected(stream_info))
                 return;
 
-            Debug.Log(string.Format("LSL Stream {0} Lost for {1}", stream.Name, name));
+            Debug.Log(string.Format("LSL Stream {0} Lost for {1}", stream_info.name(), name));
 
             OnStreamLost();
         }
 
-        protected virtual bool isTheExpected(LSLStreamInfoWrapper stream)
+        protected virtual bool isTheExpected(StreamInfo stream_info)
         {
-            bool predicate = StreamName.Equals(stream.Name);
-            predicate &= StreamType.Equals(stream.Type);
+            bool predicate = StreamName == "" || StreamName.Equals(stream_info.name());
+            predicate &= StreamType == "" || StreamType.Equals(stream_info.type());
 
             return predicate;
         }
 
-        protected abstract void pullSamples();
+        // Must override for each data type because LSL can't handle Generics.
+        protected abstract void pullChunk();
+
+        protected abstract void Process(TData[] newSample, double timestamp);
+
+        protected void ProcessChunk(int n_samples)
+        {
+            if (n_samples == 0)
+                return;
+            for (int sample_ix = ProcessLastInChunkOnly ? n_samples-1 : 0; sample_ix < n_samples; sample_ix++)
+            {
+                for (int chan_ix = 0; chan_ix < ChannelCount; chan_ix++)
+                {
+                    single_sample[chan_ix] = data_buffer[sample_ix, chan_ix];
+                }
+                Process(single_sample, timestamp_buffer[sample_ix]);
+            }
+        }
 
         protected virtual void OnStreamAvailable()
         {
@@ -88,223 +150,72 @@ namespace LSL4Unity.Scripts.AbstractInlets
             // base implementation may not decide what happens when the stream gets lost
             throw new NotImplementedException("Please override this method in a derived class!");
         }
-    }
 
-    public abstract class InletFloatSamples : ABaseInlet
-    {
-        protected abstract void Process(float[] newSample, double timeStamp);
-
-        protected float[] sample;
-
-        protected override void pullSamples()
+        protected void FixedUpdate()
         {
-            sample = new float[expectedChannels];
+            if (moment == MomentForSampling.FixedUpdate && inlet != null)
+                pullChunk();
+        }
 
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
+        protected void Update()
+        {
+            if (moment == MomentForSampling.Update && inlet != null)
+                pullChunk();
+        }
 
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+        protected void LateUpdate()
+        {
+            if (moment == MomentForSampling.LateUpdate && inlet != null)
+                pullChunk();
         }
     }
 
-    public abstract class InletDoubleSamples : ABaseInlet
+    public abstract class AFloatInlet : ABaseInlet<float>
     {
-        protected abstract void Process(double[] newSample, double timeStamp);
-
-        protected double[] sample;
-
-        protected override void pullSamples()
+        protected override void pullChunk()
         {
-            sample = new double[expectedChannels];
-
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
-
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
         }
     }
 
-    public abstract class InletIntSamples : ABaseInlet
+    public abstract class ADoubleInlet : ABaseInlet<double>
     {
-        protected abstract void Process(int[] newSample, double timeStamp);
-
-        protected int[] sample;
-
-        protected override void pullSamples()
+        protected override void pullChunk()
         {
-            sample = new int[expectedChannels];
-
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
-
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
         }
     }
 
-    public abstract class InletCharSamples : ABaseInlet
+    public abstract class AIntInlet : ABaseInlet<int>
     {
-        protected abstract void Process(char[] newSample, double timeStamp);
-
-        protected char[] sample;
-
-        protected override void pullSamples()
+        protected override void pullChunk()
         {
-            sample = new char[expectedChannels];
-
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
-
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
         }
     }
 
-    public abstract class InletStringSamples : ABaseInlet
+    public abstract class ACharInlet : ABaseInlet<char>
     {
-        protected abstract void Process(String[] newSample, double timeStamp);
-
-        protected String[] sample;
-
-        protected override void pullSamples()
+        protected override void pullChunk()
         {
-            sample = new String[expectedChannels];
-
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
-
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
         }
     }
 
-    public abstract class InletShortSamples : ABaseInlet
+    public abstract class InletAStringInlet : ABaseInlet<String>
     {
-        protected abstract void Process(short[] newSample, double timeStamp);
-
-        protected short[] sample;
-
-        protected override void pullSamples()
+        protected override void pullChunk()
         {
-            sample = new short[expectedChannels];
-
-            try
-            {
-                double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
-
-                if (lastTimeStamp != 0.0)
-                {
-                    // do not miss the first one found
-                    Process(sample, lastTimeStamp);
-                    // pull as long samples are available
-                    while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
-                    {
-                        Process(sample, lastTimeStamp);
-                    }
-
-                }
-            }
-            catch (ArgumentException aex)
-            {
-                Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                this.enabled = false;
-                Debug.LogException(aex, this);
-            }
-
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
         }
     }
 
+    public abstract class AShortInlet : ABaseInlet<short>
+    {
+        protected override void pullChunk()
+        {
+            ProcessChunk(inlet.pull_chunk(data_buffer, timestamp_buffer));
+        }
+    }
 
 }

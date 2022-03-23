@@ -1,49 +1,55 @@
-﻿using System;
+﻿///<summary>
+/// Copy-Pasted the base Resolver class from the LSL4Unity toolbox to correct 
+/// for a few bugs in the code. 
+/// 
+/// </summary>
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using LSL;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
-namespace LSL4Unity.Scripts
+
+namespace LSL4Unity.Utils
 {
     /// <summary>
     /// Encapsulates the lookup logic for LSL streams with an event based appraoch
-    /// your custom stream inlet implementations could be subscribed to the On
+    /// your custom stream inlet implementations could be subscribed to the OnStreamFound
     /// </summary>
-    public class Resolver : MonoBehaviour, IEventSystemHandler
+    public class Resolver : MonoBehaviour
     {
-
-        public List<LSLStreamInfoWrapper> knownStreams;
+        public List<StreamInfo> knownStreams = new List<StreamInfo>();
+        // public List<StreamInfoWrapper> knownStreams = new List<StreamInfoWrapper>;
 
         public float forgetStreamAfter = 1.0f;
 
         private ContinuousResolver resolver;
 
-        private bool resolve = true;
+        public delegate void StreamFound(StreamInfo streamInfo);  // Declare callback signature when stream found.
+        public StreamFound OnStreamFound;                         // delegate instance to hold callbacks.
 
-        public StreamEvent onStreamFound = new StreamEvent();
+        public delegate void StreamLost(StreamInfo streamInfo);
+        public StreamLost OnStreamLost;
 
-        public StreamEvent onStreamLost = new StreamEvent();
-
-        // Use this for initialization
-        void Start()
+        public bool Resolve
         {
+            get { return (OnStreamFound != null || OnStreamLost != null); }
+            set {  }
+        }
 
+        public void Start()
+        {
             resolver = new ContinuousResolver(forgetStreamAfter);
-
             StartCoroutine(resolveContinuously());
         }
 
-        public bool IsStreamAvailable(out LSLStreamInfoWrapper info, string streamName = "", string streamType = "", string hostName = "")
+        public bool IsStreamAvailable(out StreamInfo info, string streamName = "", string streamType = "", string hostName = "")
         {
             var result = knownStreams.Where(i =>
 
-            (streamName == "" || i.Name.Equals(streamName)) &&
-            (streamType == "" || i.Type.Equals(streamType)) &&
-            (hostName == "" || i.Type.Equals(hostName))
+            (streamName == "" || i.name().Equals(streamName)) &&
+            (streamType == "" || i.type().Equals(streamType)) &&
+            (hostName == "" || i.type().Equals(hostName))
             );
 
             if (result.Any())
@@ -60,31 +66,32 @@ namespace LSL4Unity.Scripts
 
         private IEnumerator resolveContinuously()
         {
-            while (resolve)
+            // We don't bother checking the resolver unless we have any registered callbacks.
+            //  This gives other objects time to setup and register before streams go into knownStreams!
+            while (Resolve)
             {
                 var results = resolver.results();
 
                 foreach (var item in knownStreams)
                 {
-                    if (!results.Any(r => r.name().Equals(item.Name)))
+                    if (!results.Any(r => r.name().Equals(item.name())))
                     {
-                        onStreamLost?.Invoke(item);
+                        OnStreamLost?.Invoke(item);
                     }
                 }
 
                 // remove lost streams from cache
-                knownStreams.RemoveAll(s => !results.Any(r => r.name().Equals(s.Name)));
+                knownStreams.RemoveAll(s => !results.Any(r => r.name().Equals(s.name())));
 
                 // add new found streams to the cache
                 foreach (var item in results)
                 {
-                    if (!knownStreams.Any(s => s.Name == item.name() && s.Type == item.type()))
+                    if (!knownStreams.Any(s => s.name() == item.name() ))
                     {
                         Debug.Log(string.Format("Found new Stream {0}", item.name()));
-
-                        var newStreamInfo = new LSLStreamInfoWrapper(item);
-                        knownStreams.Add(newStreamInfo);
-                        onStreamFound?.Invoke(newStreamInfo);
+                        // var newStreamInfo = new StreamInfoWrapper(item);
+                        knownStreams.Add(item);  // newStreamInfo);
+                        OnStreamFound?.Invoke(item);  // newStreamInfo);
                     }
                 }
 
@@ -93,104 +100,4 @@ namespace LSL4Unity.Scripts
             yield return null;
         }
     }
-
-    [Serializable]
-    public class LSLStreamInfoWrapper
-    {
-        public string Name;
-
-        public string Type;
-
-        private StreamInfo item;
-        private readonly string streamUID;
-
-        private readonly int channelCount;
-        private readonly string sessionId;
-        private readonly string sourceID;
-        private readonly double dataRate;
-        private readonly string hostName;
-        private readonly int streamVersion;
-
-        public LSLStreamInfoWrapper(StreamInfo item)
-        {
-            this.item = item;
-            Name = item.name();
-            Type = item.type();
-            channelCount = item.channel_count();
-            streamUID = item.uid();
-            sessionId = item.session_id();
-            sourceID = item.source_id();
-            dataRate = item.nominal_srate();
-            hostName = item.hostname();
-            streamVersion = item.version();
-        }
-
-        public StreamInfo Item
-        {
-            get
-            {
-                return item;
-            }
-        }
-
-        public string StreamUID
-        {
-            get
-            {
-                return streamUID;
-            }
-        }
-
-        public int ChannelCount
-        {
-            get
-            {
-                return channelCount;
-            }
-        }
-
-        public string SessionId
-        {
-            get
-            {
-                return sessionId;
-            }
-        }
-
-        public string SourceID
-        {
-            get
-            {
-                return sourceID;
-            }
-        }
-
-        public string HostName
-        {
-            get
-            {
-                return hostName;
-            }
-        }
-
-        public double DataRate
-        {
-            get
-            {
-                return dataRate;
-            }
-        }
-
-        public int StreamVersion
-        {
-            get
-            {
-                return streamVersion;
-            }
-        }
-    }
-
-    [Serializable]
-    public class StreamEvent : UnityEvent<LSLStreamInfoWrapper> { }
 }
-

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-namespace LSL4Unity.Scripts
+
+namespace LSL4Unity.Utils
 {
     /// <summary>
     /// This singleton should provide an dedicated timestamp for each update call or fixed update LSL sample!
@@ -8,10 +9,10 @@ namespace LSL4Unity.Scripts
     /// Important! Make sure that the script is called before the default execution order!
     /// </summary>
     [ScriptOrder( -1000 )]
-    public class LSLTimeSync : MonoBehaviour
+    public class TimeSync : MonoBehaviour
     {
-        private static LSLTimeSync instance;
-        public static LSLTimeSync Instance
+        private static TimeSync instance;
+        public static TimeSync Instance
         {
             get
             {
@@ -45,7 +46,7 @@ namespace LSL4Unity.Scripts
 
         void Awake()
         {
-            LSLTimeSync.instance = this;
+            TimeSync.instance = this;
         }
 
         void FixedUpdate()
