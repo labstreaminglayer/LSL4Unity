@@ -4,7 +4,9 @@
     "references": [
         "labstreaminglayer.LSL4Unity.Runtime"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
