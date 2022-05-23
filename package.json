@@ -1,0 +1,29 @@
+{
+    "name": "com.labstreaminglayer.lsl4unity",
+    "version": "1.16.0",
+    "description": "labstreaminglayer for Unity",
+    "displayName": "labstreaminglayer for Unity",
+    "unity": "2020.3",
+    "author": {
+        "name": "Chadwick Boulay",
+        "email": "chadwick.boulay@gmail.com"
+    },
+    "documentationUrl": "https://github.com/labstreaminglayer/LSL4Unity",
+    "samples": [
+        {
+            "displayName": "SimpleInletScaleObject",
+            "description": "Use an LSL Inlet's data to scale a GameObject - Simple",
+            "path": "Samples~/SimpleInletScaleObject"
+        },
+        {
+            "displayName": "SimplePhysicsEventOutlet",
+            "description": "Stream trigger events over an LSL Outlet.",
+            "path": "Samples~/SimplePhysicsEventOutlet"
+        },
+        {
+            "displayName": "ComplexOutletInletEvent",
+            "description": "Randomly moving capsule streams out its pose, while a cube sets its pose from a stream, and a flashing pane streams out its colour-change events.",
+            "path": "Samples~/ComplexOutletInletEvent"
+        }
+    ]
+}

@@ -3,7 +3,7 @@ using UnityEditor;
 using LSL;
 using System.Collections.Generic;
 
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.EditorExtensions
 {
     public class LSLShowStreamsWindow : EditorWindow
     {
@@ -18,15 +18,15 @@ namespace Assets.LSL4Unity.EditorExtensions
         private Vector2 scrollVector;
         private string streamLookUpResult;
 
-        private liblsl.ContinuousResolver resolver;
+        private ContinuousResolver resolver;
         private string lslVersionInfos;
 
         public void Init()
         {
-            resolver = new liblsl.ContinuousResolver();
+            resolver = new ContinuousResolver();
 
-            var libVersion = liblsl.library_version();
-            var protocolVersion = liblsl.protocol_version();
+            var libVersion = LSL.LSL.library_version();
+            var protocolVersion = LSL.LSL.protocol_version();
 
             var lib_major = libVersion / 100;
             var lib_minor = libVersion % 100;
@@ -38,7 +38,7 @@ namespace Assets.LSL4Unity.EditorExtensions
             this.titleContent = new GUIContent("LSL Utility");
         }
 
-        liblsl.StreamInfo[] streamInfos = null;
+        StreamInfo[] streamInfos = null;
 
         void OnGUI()
         {

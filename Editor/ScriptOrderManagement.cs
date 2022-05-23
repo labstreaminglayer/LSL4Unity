@@ -2,7 +2,7 @@
 using UnityEditor;
 using System;
 
-namespace Assets.LSL4Unity.EditorExtensions
+namespace LSL4Unity.EditorExtensions
 {
     [InitializeOnLoad]
     class ScriptOrderManagement

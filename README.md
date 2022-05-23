@@ -1,37 +1,68 @@
-LSL4Unity is no longer in active development. The recommended way to use LSL in unity is to follow the [Unity instructions in the liblsl-Csharp project](https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md). However, LSL4Unity still has some very useful examples of how to use LSL in Unity effectively.
-
 # LSL4Unity
-A integration approach of the LabStreamingLayer Framework for Unity3D providing the following features.
 
+LSL4Unity was originally created by @xfleckx several years ago. That version has been [archived](https://github.com/labstreaminglayer/LSL4Unity/releases/tag/archive).
+
+LSL4Unity is reborn as a [Unity Custom Package](https://docs.unity3d.com/Manual/CustomPackages.html).
+
+The package comprises:
+
+* [liblsl-Csharp](https://github.com/labstreaminglayer/liblsl-Csharp) as a [Unity Native plug-in](https://docs.unity3d.com/Manual/NativePlugins.html).
+    * Has LSL.cs and shared object files for various platforms.
+* General assets to facilitate using liblsl in Unity.
 * Simple Editor Integration to lookup LSL streams. 
-* Provides a ready to use Marker stream implementation.
-* Basic implementations and examples for LSL inlets and outlets.
-* Build hooks to copy correct platform library to the build directory
+* Samples to show basic functionality, including continuous inlets, outlets, and event outlets.
 
-See the [Project Wiki](https://github.com/xfleckx/LSL4Unity/wiki) to get more details and installation instructions.
-Also, see the [Tips](https://github.com/xfleckx/LSL4Unity/wiki/Tips-for-using-LSL4Unity)!
+## Adding to your project
 
-**LSL ships a C# wrapper for the LSL lib - why should I use an additional wrapper?**
+### Option 1 - From the Editor
 
-Good question - LSL4Unity tries to provide an enhanced user experience within Unity.
-It is intented to solve several issues,
-* instable framerates results in irregular sampling intervalls
-* plattform dependent compilation
+Open the Package Manager Window, click on the `+` dropdown, and [choose `Add package from git URL...`](https://docs.unity3d.com/Manual/upm-ui-giturl.html). Enter the followingURL: 
 
-when using an Game Engine - in this case Unity - as a data provider within your experiments.
+`https://github.com/labstreaminglayer/LSL4Unity.git`
 
-We also try to provide an easy start with predefined implementations which supports a integration into the EEGLAB, BCILAB and MoBILAB ecosystem. **Far from finished :X**
- 
-# Compatibility info
-Currently LSL ~~works only with x64 builds~~ might work x64 and x86 builds of Unity3D projects!
-I got the whole thing running on both platforms under Windows. 
- 
-Linux and MacOS X Support seems to be working at least in the editor but more testing is necessary.
-Contributions are welcome! Just try to build the example scene on your platform and report potential errors as issues! 
+### Option 2 - Modify Project Package Manifest
 
-# Dependencies
-In the current Version, the Asset package ships a sligthly modified version of the C# LSL API and the plugin binaries.
-The LabStreaming Layer is original created by SCCN und could be found at <https://github.com/sccn/labstreaminglayer>.
+This option is preferred if this package will be a dependency of another package.
 
-It's highly recommended to read the section about the [Time Synchronization](https://labstreaminglayer.readthedocs.io/info/time_synchronization.html) before building your own experiments!
+Edit `<your project folder>/Packages/manifest.json` and [add the following to your dependencies section](https://docs.unity3d.com/2020.3/Documentation/Manual/upm-git.html):
 
+`"com.LSL.LSL4Unity": "https://github.com/labstreaminglayer/LSL4Unity.git"`
+
+### (Future) Option 3 - Using OpenUPM
+
+TODO - https://openupm.com/docs/
+
+## Using LSL4Unity
+
+The easiest way is to use the Package Manager window, select the LSL4Unity package, and choose to Import one or more of the Samples.
+
+The samples appear in `Assets/labstreaminglayer for Unity/1.16.0/{sample name}`. Open the sample's scene.
+
+### Simple Inlet Scale Object
+
+This scene uses LSL.cs only, and not any of the Utilitis or helpers that come with LSL4Unity. Thus it demonstrates the minimum required steps to resolve, open, and pull data from an LSL Inlet in Unity.
+
+You will need a separate process running an LSL outlet with at least 3 float channels. In an active Python environment with [`pylsl`](https://github.com/labstreaminglayer/liblsl-Python) installed, run `python -m pylsl.examples.SendDataAdvanced`.
+
+The cylinder will update its scale according to the data coming in from the found stream.
+
+### Simple Physics Event Outlet
+
+This scene uses LSL.cs only, and shows the minimal amount of code to setup a Markers stream and send events.
+
+A sphere oscillates back and forth. Whenever it enters or exits the collider of a nearby cube, an event is transmitted.
+
+Note that this sample is designed to send out physics events (collisions) and thus the events are timestamped when the collision is detected in code.
+
+If you wanted to instead timestamp stimulus events then it would be better to send out the Marker on `WaitForEndOfFrame`. There is an example of this in the Complex Sample scene.
+
+### Complex Outlet Inlet Event
+
+A capsule continuously streams its pose over an outlet. Occassionally (every 2 seconds by default), the position is reset and new velocities are applied to the capsule.
+
+A cube has its pose set (+ a static offset) by the values coming in from an inlet, the very same stream that the capsule is sending out.
+
+Thus the cube should move the same as the capsule, except delayed by the capsule outlet -> cube inlet LSL transmission.
+
+A plane changes its colours occassionally (every ~3.4 seconds). The colour change events also stream out a marker string of the new colour.
+The marker is sent out using WaitForEndOfFrame, so its timestamp should be as close as possible to the actual colour change on-screen.
