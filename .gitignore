@@ -17,3 +17,5 @@
 sysinfo.txt
 
 Plugins/*.meta
+
+.DS_Store
