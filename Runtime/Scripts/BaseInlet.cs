@@ -1,26 +1,25 @@
-﻿using LSL;
-using System;
+﻿using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using LSL;
+
 
 namespace LSL4Unity.Utils
 {
     public abstract class ABaseInlet<TData> : MonoBehaviour
     {
         public string StreamName;
-        
         public string StreamType;
+        // Hook in frame lifecycle in which to pull data.
+        public MomentForSampling moment;
 
         // Set this to true to only pass the last sample in a chunk to Process.
         public bool ProcessLastInChunkOnly = false;
 
         // Duration, in seconds, of buffer passed to pull_chunk. This must be > than average frame interval.
         double maxChunkDuration = 0.2;
-
-        // Hook in frame lifecycle in which to pull data.
-        public MomentForSampling moment;
 
         protected StreamInlet inlet;
         public Resolver resolver;
@@ -123,6 +122,7 @@ namespace LSL4Unity.Utils
         // Must override for each data type because LSL can't handle Generics.
         protected abstract void pullChunk();
 
+        // Process will be called by one of FixedUpdate, Update, LateUpdate, or a 
         protected abstract void Process(TData[] newSample, double timestamp);
 
         protected void ProcessChunk(int n_samples)
@@ -139,34 +139,50 @@ namespace LSL4Unity.Utils
             }
         }
 
+        // Child class should implement a method to do more setup after the target stream is available.
         protected virtual void OnStreamAvailable()
         {
             // base implementation may not decide what happens when the stream gets available
-            throw new NotImplementedException("Please override this method in a derived class!");
+            // throw new NotImplementedException("Please override this method in a derived class!");
         }
 
+        // Child class should implement a method to cleanup any resources that depend on the stream,
+        //  and might change if a stream becomes available again but has somehow changed.
         protected virtual void OnStreamLost()
         {
             // base implementation may not decide what happens when the stream gets lost
-            throw new NotImplementedException("Please override this method in a derived class!");
+            // throw new NotImplementedException("Please override this method in a derived class!");
         }
 
-        protected void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (moment == MomentForSampling.FixedUpdate && inlet != null)
                 pullChunk();
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
             if (moment == MomentForSampling.Update && inlet != null)
                 pullChunk();
+            else if (moment == MomentForSampling.EndOfFrame && inlet != null)
+            {
+                // Pull and process as close to render-time as possible.
+                // No idea why you'd want to use this; it won't affect anything in the game until the next frame.
+                StartCoroutine(PullAfterRendered());
+            }
         }
 
-        protected void LateUpdate()
+        protected virtual void LateUpdate()
         {
             if (moment == MomentForSampling.LateUpdate && inlet != null)
                 pullChunk();
+        }
+
+        IEnumerator PullAfterRendered()
+        {
+            yield return new WaitForEndOfFrame();
+            pullChunk();
+            yield return null;
         }
     }
 
