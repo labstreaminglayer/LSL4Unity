@@ -11,6 +11,7 @@ namespace LSL4Unity.Utils
         public string StreamType;
         public MomentForSampling moment;
         public bool IrregularRate = false;
+        private bool UniqueFromInstanceId = true;
 
         public abstract List<string> ChannelNames { get; }
         public virtual int ChannelCount { get { return ChannelNames.Count; } }
@@ -18,6 +19,8 @@ namespace LSL4Unity.Utils
 
         protected StreamOutlet outlet;
         protected TData[] sample;
+        // A singleton of a TimeSync object can ensure that all pushes that happen on the same moment (update/fixed/late etc)
+        // on the same frame will have the same timestamp.
         private TimeSync timeSync;
 
         // Add an XML element for each channel. The automatic version adds only channel labels. Override to add unit, location, etc.
@@ -41,7 +44,8 @@ namespace LSL4Unity.Utils
             hash.Append(StreamName);
             hash.Append(StreamType);
             hash.Append(moment.ToString());
-            hash.Append(gameObject.GetInstanceID());
+            if (UniqueFromInstanceId)
+                hash.Append(gameObject.GetInstanceID());
             ExtendHash(hash);
 
             double dataRate = IrregularRate ? LSL.LSL.IRREGULAR_RATE : LSLCommon.GetSamplingRateFor(moment);
@@ -63,7 +67,7 @@ namespace LSL4Unity.Utils
         protected abstract void pushSample(double timestamp = 0);
 
         // Update is called once per frame
-        void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (moment == MomentForSampling.FixedUpdate && outlet != null)
             {
@@ -72,7 +76,7 @@ namespace LSL4Unity.Utils
             }
         }
 
-        void Update()
+        protected virtual void Update()
         {
             if (outlet != null)
             {
@@ -91,7 +95,7 @@ namespace LSL4Unity.Utils
             }
         }
 
-        void LateUpdate()
+        protected virtual void LateUpdate()
         {
             if (moment == MomentForSampling.LateUpdate && outlet != null)
             {
