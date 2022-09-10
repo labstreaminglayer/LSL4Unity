@@ -77,21 +77,23 @@ namespace LSL4Unity.Utils
             single_sample = new TData[nChannels];
 
             XMLElement channels = inlet.info().desc().child("channels");
+            XMLElement chan;
             if (!channels.empty())
+                chan = channels.first_child();
+            else
+                chan = channels;
+            
+            ChannelNames.Clear();
+            for (int chan_ix = 0; chan_ix < nChannels; chan_ix++)
             {
-                
-                XMLElement chan = channels.first_child();
-                while (!chan.empty())
+                if (!chan.empty())
                 {
-                    // Read chan
                     ChannelNames.Add(chan.child_value("label"));
                     chan = chan.next_sibling();
                 }
-            }
-            // Pad with empty strings to make ChannelNames length == nChannels.
-            for (int chan_ix = ChannelNames.Count; chan_ix < nChannels; chan_ix++)
-            {
-                ChannelNames.Add("Chan" + chan_ix);
+                else
+                    // Pad with empty strings to make ChannelNames length == nChannels.
+                    ChannelNames.Add("Chan" + chan_ix);
             }
 
             OnStreamAvailable();
