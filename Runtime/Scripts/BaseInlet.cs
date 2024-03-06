@@ -69,7 +69,12 @@ namespace LSL4Unity.Utils
             Debug.Log(string.Format("LSL Stream {0} found for {1}", stream_info.name(), name));
 
             inlet = new StreamInlet(stream_info);
-            int buf_samples = (int)Mathf.Ceil((float)(inlet.info().nominal_srate() * maxChunkDuration));
+            double samplingRate = inlet.info().nominal_srate();
+            if (samplingRate == LSL.LSL.IRREGULAR_RATE) {
+                // Irregular rates are usually used for markers. This sampling rate will allow init of buffers that should largely cover normal use cases.
+                samplingRate = 128;
+            }
+            int buf_samples = (int)Mathf.Ceil((float)(samplingRate * maxChunkDuration));
             int nChannels = inlet.info().channel_count();
 
             timestamp_buffer = new double[buf_samples];
